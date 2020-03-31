@@ -2,7 +2,11 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 
+import {useInitDB} from './hooks/database'
+
 function App() {
+  useInitDB()
+
   return (
     <div className="App">
       <header className="App-header">
