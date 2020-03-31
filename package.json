@@ -7,9 +7,11 @@
     "@blueprintjs/icons": "^3.14.0",
     "@blueprintjs/select": "^3.12.0",
     "firebase": "^7.13.1",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "stylelint-config-sass-guidelines": "^7.0.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -17,7 +19,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix --ignore-pattern node_modules && stylelint --fix '**/*.css'"
+    "lint-types": "tsc --noEmit",
+    "lint-code": "eslint '*/**/*.{js,ts,tsx}' --quiet --ignore-pattern node_modules",
+    "lint-style": "stylelint '**/*.{css,scss}'",
+    "lint": "yarn lint-types && yarn lint-code --fix && yarn lint-style --fix"
   },
   "browserslist": {
     "production": [
@@ -49,7 +54,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --ignore-pattern node_modules && stylelint '**/*.css'"
+      "pre-commit": "yarn lint-types && yarn lint-code && yarn lint-style"
     }
   }
 }

@@ -4,7 +4,7 @@ import Home from './components/Home'
 
 import {useInitDB} from './hooks/database'
 
-import './App.css'
+import './App.scss'
 
 function App() {
   useInitDB()

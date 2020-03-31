@@ -1,7 +1,7 @@
 import React from 'react'
 import {H1, Button, H3} from '@blueprintjs/core'
 
-import './Home.css'
+import './Home.scss'
 
 const Home = () => {
   return (

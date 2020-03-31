@@ -1,5 +1,8 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines"
+  ],
   "plugins": [
     "stylelint-order"
   ],
@@ -13,6 +16,11 @@
       "at-rules",
       "less-mixins"
     ],
-    "order/properties-alphabetical-order": true
+    "order/properties-alphabetical-order": true,
+    "selector-max-id": 5,
+    "selector-list-comma-newline-after": "never-multi-line",
+    "selector-list-comma-newline-before": "never-multi-line",
+    "selector-list-comma-space-after": "always",
+    "selector-list-comma-space-before": "never"
   }
 }
