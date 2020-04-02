@@ -1,0 +1,15 @@
+.exercise {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .remove-button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+
+  .done-button {
+    justify-content: end;
+  }
+}

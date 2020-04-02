@@ -1,0 +1,22 @@
+.new-test {
+  height: 100%;
+  padding-top: 15px;
+  width: 60%;
+
+  h1 {
+    text-align: center;
+  }
+
+  .form-area {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      width: 40px;
+    }
+  }
+
+  .add-exercise {
+    margin-top: 15px;
+  }
+}
