@@ -1,11 +1,22 @@
 import React from 'react'
 import {H1, FormGroup, InputGroup, Button, ButtonGroup} from '@blueprintjs/core'
+import {useSelector, useDispatch} from 'react-redux'
+
+import {exercisesSelector} from '../../redux/selectors'
+import {addExercise} from '../../redux/reducers/creator'
 
 import Exercise from '../exercises/Exercise'
 
 import './NewTestScreen.scss'
 
 const NewTestScreen = () => {
+  const dispatch = useDispatch()
+  const exerices = useSelector(exercisesSelector)
+
+  const add = () => {
+    dispatch(addExercise())
+  }
+
   return (
     <div className="new-test">
       <H1>New Test</H1>
@@ -21,8 +32,10 @@ const NewTestScreen = () => {
         </FormGroup>
       </div>
       <div className="exercises">
-        <Exercise />
-        <ButtonGroup className="add-exercise">
+        {exerices.map((_, index) => (
+          <Exercise key={index} index={index} />
+        ))}
+        <ButtonGroup className="add-exercise" onClick={add}>
           <Button large intent="primary" icon="add" text="Add exercise" />
         </ButtonGroup>
       </div>

@@ -1,13 +1,11 @@
 import React from 'react'
 import {FormGroup, InputGroup} from '@blueprintjs/core'
 
+import {ExerciseComponentProps} from '../../constants'
+
 import './WordOrderExercise.scss'
 
-type WordOrderExerciseProps = {
-  disabled: boolean
-}
-
-const WordOrderExercise = ({disabled}: WordOrderExerciseProps) => {
+const WordOrderExercise = ({disabled}: ExerciseComponentProps) => {
   return (
     <FormGroup label="Sentence:" inline contentClassName="sentence-input" disabled={disabled}>
       <InputGroup fill disabled={disabled} />
