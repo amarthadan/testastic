@@ -1,19 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {ExerciseTypes, defaultExerciseType} from '../../constants'
-
-type ExerciseCommon = {
-  type: ExerciseTypes
-  description: string
-}
-
-type FreeTextExercise = ExerciseCommon
-
-type WordOrderExercise = {
-  sentence: string
-} & ExerciseCommon
-
-type Exercise = FreeTextExercise | WordOrderExercise
+import {defaultExerciseType, exerciseTypes} from '../../constants'
+import {Exercise, ExerciseTypes} from '../../types'
 
 type CreatorState = {
   exercises: Array<Exercise>
@@ -31,13 +19,12 @@ type ExerciseUpdateDescriptionPayload = {
   description: string
 } & ExerciseUpdatePayloadCommon
 
+type ExerciseUpdatePayload = {
+  exercise: Exercise
+} & ExerciseUpdatePayloadCommon
+
 const initialState: CreatorState = {
   exercises: [],
-}
-
-const defultExercise: Exercise = {
-  type: defaultExerciseType,
-  description: '',
 }
 
 const creator = createSlice({
@@ -45,13 +32,16 @@ const creator = createSlice({
   initialState,
   reducers: {
     addExercise(state) {
-      state.exercises.push(defultExercise)
+      state.exercises.push(exerciseTypes[defaultExerciseType].emptyState)
     },
     removeExercise(state, action: PayloadAction<number>) {
       state.exercises.splice(action.payload, 1)
     },
+    updateExercise(state, action: PayloadAction<ExerciseUpdatePayload>) {
+      state.exercises[action.payload.index] = action.payload.exercise
+    },
     updateExerciseType(state, action: PayloadAction<ExerciseUpdateTypePayload>) {
-      state.exercises[action.payload.index].type = action.payload.type
+      state.exercises[action.payload.index] = exerciseTypes[action.payload.type].emptyState
     },
     updateExerciseDescription(state, action: PayloadAction<ExerciseUpdateDescriptionPayload>) {
       state.exercises[action.payload.index].description = action.payload.description
@@ -59,6 +49,12 @@ const creator = createSlice({
   },
 })
 
-export const {addExercise, removeExercise, updateExerciseType, updateExerciseDescription} = creator.actions
+export const {
+  addExercise,
+  removeExercise,
+  updateExercise,
+  updateExerciseType,
+  updateExerciseDescription,
+} = creator.actions
 
 export default creator.reducer

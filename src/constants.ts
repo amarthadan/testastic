@@ -1,29 +1,23 @@
 import WordOrderExercise from './components/exercises/WordOrderExercise'
-
-export enum ExerciseTypes {
-  FreeText = 'FREE_TEXT',
-  WordOrder = 'WORD_ORDER',
-}
-
-export type ExerciseComponentProps = {
-  disabled: boolean
-}
-
-type ExerciseComponent = (props: ExerciseComponentProps) => JSX.Element
-
-type ExerciseTypeDefinition = {
-  name: string
-  component: ExerciseComponent | null
-}
+import {ExerciseTypeDefinition, ExerciseTypes} from './types'
 
 export const exerciseTypes: Record<ExerciseTypes, ExerciseTypeDefinition> = {
   [ExerciseTypes.FreeText]: {
     name: 'Free Text',
     component: null,
+    emptyState: {
+      type: ExerciseTypes.FreeText,
+      description: '',
+    },
   },
   [ExerciseTypes.WordOrder]: {
     name: 'Word Order',
     component: WordOrderExercise,
+    emptyState: {
+      type: ExerciseTypes.WordOrder,
+      description: '',
+      sentence: '',
+    },
   },
 }
 

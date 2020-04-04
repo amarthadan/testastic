@@ -32,8 +32,8 @@ const NewTestScreen = () => {
         </FormGroup>
       </div>
       <div className="exercises">
-        {exerices.map((_, index) => (
-          <Exercise key={index} index={index} />
+        {exerices.map((exercise, index) => (
+          <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
         ))}
         <ButtonGroup className="add-exercise" onClick={add}>
           <Button large intent="primary" icon="add" text="Add exercise" />

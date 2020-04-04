@@ -1,12 +1,11 @@
 import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {Button, MenuItem, FormGroup, Card, TextArea, ButtonGroup, Intent} from '@blueprintjs/core'
 import {ItemRenderer, Select} from '@blueprintjs/select'
 
-import {ExerciseTypes, exerciseTypes} from '../../constants'
+import {exerciseTypes} from '../../constants'
 import {removeExercise, updateExerciseType, updateExerciseDescription} from '../../redux/reducers/creator'
-import {RootState} from '../../redux/reducers/root'
-import {exerciseSelector} from '../../redux/selectors'
+import {ExerciseTypes} from '../../types'
 
 import './Exercise.scss'
 
@@ -26,17 +25,18 @@ const renderType: ItemRenderer<ExerciseTypes> = (exerciseType, {handleClick, mod
   )
 }
 
-type ExerciseProps = {
+interface ExerciseProps {
   index: number
+  type: ExerciseTypes
+  description: string
 }
 
-const Exercise = ({index}: ExerciseProps) => {
+const Exercise = ({index, type, description}: ExerciseProps) => {
   const dispatch = useDispatch()
-  const exercise = useSelector((state: RootState) => exerciseSelector(state, index))
   const [disabled, setDisabled] = useState(false)
   const [doneButtonIntent, setDoneButtonIntent] = useState<Intent>(Intent.PRIMARY)
 
-  const SpecificExercise = exerciseTypes[exercise.type].component
+  const SpecificExercise = exerciseTypes[type].component
 
   const markAsDone = () => {
     setDoneButtonIntent(Intent.SUCCESS)
@@ -56,6 +56,7 @@ const Exercise = ({index}: ExerciseProps) => {
       <Button minimal intent="danger" icon="trash" className="remove-button" onClick={remove} />
       <FormGroup label="Exercise type:" inline disabled={disabled}>
         {/* TODO: findDOMNode is deprecated in StrictMode error (see console) */}
+        {/* TODO: last selected item is not highligted */}
         <ExerciseTypeSelect
           items={Object.values(ExerciseTypes)}
           itemRenderer={renderType}
@@ -66,7 +67,7 @@ const Exercise = ({index}: ExerciseProps) => {
           popoverProps={{minimal: true}}
           disabled={disabled}
         >
-          <Button text={exerciseTypes[exercise.type].name} rightIcon="caret-down" disabled={disabled} />
+          <Button text={exerciseTypes[type].name} rightIcon="caret-down" disabled={disabled} />
         </ExerciseTypeSelect>
       </FormGroup>
       <FormGroup label="Description:" disabled={disabled}>
@@ -74,11 +75,11 @@ const Exercise = ({index}: ExerciseProps) => {
           growVertically={true}
           fill
           disabled={disabled}
-          value={exercise.description}
+          value={description}
           onChange={handleDescriptionChange}
         />
       </FormGroup>
-      <div className="specific">{SpecificExercise && <SpecificExercise disabled={disabled} />}</div>
+      <div className="specific">{SpecificExercise && <SpecificExercise disabled={disabled} index={index} />}</div>
       <ButtonGroup className="done-button">
         <Button text="Done" icon="tick" intent={doneButtonIntent} onClick={markAsDone} disabled={disabled} />
       </ButtonGroup>
