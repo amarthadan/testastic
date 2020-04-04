@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint-types": "tsc --noEmit",
-    "lint-code": "eslint '*/**/*.{js,ts,tsx}' --quiet --ignore-pattern node_modules",
+    "lint-code": "eslint '**/*.{js,ts,tsx}' --quiet --max-warnings 0",
     "lint-style": "stylelint '**/*.{css,scss}'",
     "lint": "yarn lint-types && yarn lint-code --fix && yarn lint-style --fix"
   },
