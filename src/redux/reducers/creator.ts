@@ -1,10 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {defaultExerciseType, exerciseTypes} from '../../constants'
-import {Exercise, ExerciseTypes} from '../../types'
+import {defaultExerciseType, exerciseTypes} from '../../utils/exercises'
+import {ExerciseState, ExerciseTypes} from '../../types'
 
 type CreatorState = {
-  exercises: Array<Exercise>
+  exercises: Array<ExerciseState>
 }
 
 type ExerciseUpdatePayloadCommon = {
@@ -20,7 +20,7 @@ type ExerciseUpdateDescriptionPayload = {
 } & ExerciseUpdatePayloadCommon
 
 type ExerciseUpdatePayload = {
-  exercise: Exercise
+  exercise: ExerciseState
 } & ExerciseUpdatePayloadCommon
 
 const initialState: CreatorState = {

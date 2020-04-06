@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {Button, MenuItem, FormGroup, Card, TextArea, ButtonGroup, Intent} from '@blueprintjs/core'
 import {ItemRenderer, Select} from '@blueprintjs/select'
 
-import {exerciseTypes} from '../../constants'
+import {exerciseTypes} from '../../utils/exercises'
 import {removeExercise, updateExerciseType, updateExerciseDescription} from '../../redux/reducers/creator'
 import {ExerciseTypes} from '../../types'
 
