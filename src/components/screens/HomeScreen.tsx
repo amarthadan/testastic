@@ -9,7 +9,7 @@ const HomeScreen = () => {
     <div className="home">
       <H1>Welcome to Testastic!</H1>
       <H3>Start by creating a new test</H3>
-      <Link to="/new" className="add-button">
+      <Link to="/create" className="add-button">
         <Button large intent="primary" icon="add" />
       </Link>
     </div>

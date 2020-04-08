@@ -3,6 +3,7 @@
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
 
 html, body, #root {
+  font-size: 1em;
   height: 100%;
 }
 
@@ -12,7 +13,7 @@ html, body, #root {
   flex-direction: column;
   justify-content: center;
 
-  h1 {
+  h1, h2 {
     margin-bottom: 20px;
   }
 }

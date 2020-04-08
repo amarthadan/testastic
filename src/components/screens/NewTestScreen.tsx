@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent} from '@blueprintjs/core'
+import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent, H2} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {exercisesSelector} from '../../redux/selectors'
@@ -14,6 +14,7 @@ import Toaster from '../common/Toaster'
 import Working from '../common/Working'
 
 import './NewTestScreen.scss'
+import {Link} from 'react-router-dom'
 
 const NewTestScreen = () => {
   const dispatch = useDispatch()
@@ -22,6 +23,9 @@ const NewTestScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [working, setWorking] = useState(false)
+  const [created, setCreated] = useState(false)
+  const [resultsId, setResultsId] = useState<string>()
+  const [testId, setTestId] = useState<string>()
   const testsCollection = useCollection(Collections.Tests)
   const correctAnswersCollection = useCollection(Collections.CorrectAnswers)
 
@@ -74,6 +78,10 @@ const NewTestScreen = () => {
         const answer = answers[i]
         answer && correctAnswersCollection.doc(exerciseDocumentIds[i]).set({answer})
       }
+
+      setTestId(testDocumentRef.id)
+      setResultsId(testDocument.resultsId)
+      setCreated(true)
     } catch (error) {
       console.error(error)
       Toaster.show({
@@ -87,32 +95,52 @@ const NewTestScreen = () => {
 
   return (
     <div className="new-test">
-      <H1>New Test</H1>
-      {/* TODO: Form vaidation */}
-      {/* TODO: Form validation for exercise inputs */}
-      <div className="form-area">
-        <FormGroup label="Title:" labelFor="title-input" inline>
-          <InputGroup id="title-input" value={title} onChange={handleTitleChange} />
-        </FormGroup>
-        <FormGroup label="Name:" labelFor="name-input" inline>
-          <InputGroup id="name-input" value={name} onChange={handleNameChange} />
-        </FormGroup>
-        <FormGroup label="Email:" labelFor="email-input" inline>
-          <InputGroup id="email-input" value={email} onChange={handleEmailChange} />
-        </FormGroup>
-      </div>
-      <div className="exercises">
-        {exercises.map((exercise, index) => (
-          <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
-        ))}
-        <ButtonGroup className="add-exercise" onClick={add}>
-          <Button large intent="primary" icon="add" text="Add exercise" />
-        </ButtonGroup>
-      </div>
-      <ButtonGroup className="build-test" onClick={build}>
-        <Button large intent="success" icon="build" text="Build test" />
-      </ButtonGroup>
-      <Working show={working} />
+      {created ? (
+        <>
+          <H1>Congratulation!</H1>
+          <H2>Your test is ready</H2>
+          <p>
+            {/* TODO: Add copy button for link */}
+            You can access your test here:
+            <Link to={`/tests/${testId}`}>{`${window.location.origin}/tests/${testId}`}</Link>
+          </p>
+          <p>
+            {/* TODO: Add copy button for link */}
+            You can access the results here:
+            <Link to={`/results/${resultsId}`}>{`${window.location.origin}/results/${resultsId}`}</Link>
+          </p>
+          {/* TODO: Add new test button */}
+        </>
+      ) : (
+        <>
+          <H1>New Test</H1>
+          {/* TODO: Form vaidation */}
+          {/* TODO: Form validation for exercise inputs */}
+          <div className="form-area">
+            <FormGroup label="Title:" labelFor="title-input" inline>
+              <InputGroup id="title-input" value={title} onChange={handleTitleChange} />
+            </FormGroup>
+            <FormGroup label="Name:" labelFor="name-input" inline>
+              <InputGroup id="name-input" value={name} onChange={handleNameChange} />
+            </FormGroup>
+            <FormGroup label="Email:" labelFor="email-input" inline>
+              <InputGroup id="email-input" value={email} onChange={handleEmailChange} />
+            </FormGroup>
+          </div>
+          <div className="exercises">
+            {exercises.map((exercise, index) => (
+              <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
+            ))}
+            <ButtonGroup className="add-exercise" onClick={add}>
+              <Button large intent="primary" icon="add" text="Add exercise" />
+            </ButtonGroup>
+          </div>
+          <ButtonGroup className="build-test" onClick={build}>
+            <Button large intent="success" icon="build" text="Build test" />
+          </ButtonGroup>
+          <Working show={working} />
+        </>
+      )}
     </div>
   )
 }

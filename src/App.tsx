@@ -1,6 +1,7 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
+import {H1} from '@blueprintjs/core'
 
 import HomeScreen from './components/screens/HomeScreen'
 import NewTestScreen from './components/screens/NewTestScreen'
@@ -15,13 +16,19 @@ function App() {
 
   return (
     <Provider store={store}>
+      {/* TODO: Refactor routes into constants */}
       <BrowserRouter>
         <Switch>
-          <Route path="/new">
-            <NewTestScreen />
+          <Route path="/create" component={NewTestScreen} />
+          <Route path="/tests/:id">
+            <H1>Dummy test page</H1>
           </Route>
+          <Route path="/results/:id">
+            <H1>Dummy results page</H1>
+          </Route>
+          <Route exact path="/" component={HomeScreen} />
           <Route path="/">
-            <HomeScreen />
+            <H1>Page not found</H1>
           </Route>
         </Switch>
       </BrowserRouter>
