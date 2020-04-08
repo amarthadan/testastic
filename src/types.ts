@@ -61,3 +61,9 @@ export type WordOrderExerciseDefinition = {
   // assignment: WordOrderExerciseAssignment
   // answer: WordOrderExerciseAnswer
 } & ExerciseDefinitionCommon
+
+export enum Collections {
+  Tests = 'tests',
+  Exercises = 'exercises',
+  CorrectAnswers = 'correctAnswers',
+}
