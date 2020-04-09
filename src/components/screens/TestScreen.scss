@@ -7,6 +7,15 @@
     text-align: center;
   }
 
+  .form-area {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      width: 40px;
+    }
+  }
+
   .exercises {
     margin-top: 20px;
   }

@@ -72,17 +72,19 @@ interface TestExerciseStateCommon {
   description: string
 }
 
-type TestFreeTextExerciseState = {
+export type TestFreeTextExerciseState = {
   type: ExerciseTypes.FreeText
   assignment: null
+  answer?: string
 } & TestExerciseStateCommon
 
-type TestWordOrderExerciseState = {
+export type TestWordOrderExerciseState = {
   type: ExerciseTypes.WordOrder
   assignment: Array<string>
-}
+  answer?: Array<string>
+} & TestExerciseStateCommon
 
-export type TestExerciseState = TestFreeTextExerciseState & TestWordOrderExerciseState
+export type TestExerciseState = TestFreeTextExerciseState | TestWordOrderExerciseState
 
 export interface TestSpecificExerciseComponentProps {
   index: number

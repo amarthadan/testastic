@@ -1,0 +1,18 @@
+.shuffled, .sentence {
+  display: flex;
+  flex-direction: column;
+
+  .words > span {
+    margin-right: 10px;
+    min-width: 100px;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.shuffled {
+  margin-bottom: 20px;
+}

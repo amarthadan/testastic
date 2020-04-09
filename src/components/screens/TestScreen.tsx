@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {H1, ButtonGroup, Button} from '@blueprintjs/core'
+import {H1, ButtonGroup, Button, FormGroup, InputGroup} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
 
 import Working from '../common/Working'
@@ -18,8 +18,18 @@ const TestScreen = () => {
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
   const [creator, setCreator] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const testsCollection = useCollection(Collections.Tests)
   const {id} = useParams()
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value)
+  }
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
+  }
 
   useEffect(() => {
     setWorking(true)
@@ -74,6 +84,14 @@ const TestScreen = () => {
         <>
           <H1>{title}</H1>
           <p>Creator: {creator}</p>
+          <div className="form-area">
+            <FormGroup label="Name:" labelFor="name-input" inline>
+              <InputGroup id="name-input" value={name} onChange={handleNameChange} />
+            </FormGroup>
+            <FormGroup label="Email:" labelFor="email-input" inline>
+              <InputGroup id="email-input" value={email} onChange={handleEmailChange} />
+            </FormGroup>
+          </div>
           <div className="exercises">
             {exercises.map((exercise, index) => (
               <Exercise key={index} type={exercise.type} description={exercise.description} index={index} />
