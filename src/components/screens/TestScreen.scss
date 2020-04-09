@@ -1,0 +1,19 @@
+.test {
+  height: 100%;
+  padding-top: 15px;
+  width: 60%;
+
+  h1 {
+    text-align: center;
+  }
+
+  .exercises {
+    margin-top: 20px;
+  }
+
+  .submit-test {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+}

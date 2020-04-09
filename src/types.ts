@@ -5,33 +5,33 @@ export enum ExerciseTypes {
   WordOrder = 'WORD_ORDER',
 }
 
-export interface SpecificExerciseComponentProps {
+export interface CreatorSpecificExerciseComponentProps {
   index: number
   disabled: boolean
 }
 
-interface SpecificExerciseComponent {
-  (props: SpecificExerciseComponentProps): JSX.Element
+interface CreatorSpecificExerciseComponent {
+  (props: CreatorSpecificExerciseComponentProps): JSX.Element
 }
 
-interface ExerciseStateCommon {
+interface CreatorExerciseStateCommon {
   description: string
 }
 
-type FreeTextExerciseState = {
+type CreatorFreeTextExerciseState = {
   type: ExerciseTypes.FreeText
-} & ExerciseStateCommon
+} & CreatorExerciseStateCommon
 
-export type WordOrderExerciseState = {
+export type CreatorWordOrderExerciseState = {
   type: ExerciseTypes.WordOrder
   sentence: string
-} & ExerciseStateCommon
+} & CreatorExerciseStateCommon
 
-export type ExerciseState = FreeTextExerciseState | WordOrderExerciseState
+export type CreatorExerciseState = CreatorFreeTextExerciseState | CreatorWordOrderExerciseState
 
-interface ExerciseDefinitionCommon {
+interface CreatorExerciseDefinitionCommon {
   name: string
-  component: SpecificExerciseComponent | null
+  component: CreatorSpecificExerciseComponent | null
 }
 
 // interface FreeTextExerciseAssignment {
@@ -42,11 +42,11 @@ interface ExerciseDefinitionCommon {
 //   (exercise: FreeTextExerciseState): null
 // }
 
-export type FreeTextExerciseDefinition = {
-  emptyState: FreeTextExerciseState
+export type CreatorFreeTextExerciseDefinition = {
+  emptyState: CreatorFreeTextExerciseState
   // assignment: FreeTextExerciseAssignment
   // answer: FreeTextExerciseAnswer
-} & ExerciseDefinitionCommon
+} & CreatorExerciseDefinitionCommon
 
 // interface WordOrderExerciseAssignment {
 //   (exercise: WordOrderExerciseState): Array<string>
@@ -56,14 +56,46 @@ export type FreeTextExerciseDefinition = {
 //   (exercise: WordOrderExerciseState): Array<string>
 // }
 
-export type WordOrderExerciseDefinition = {
-  emptyState: WordOrderExerciseState
+export type CreatorWordOrderExerciseDefinition = {
+  emptyState: CreatorWordOrderExerciseState
   // assignment: WordOrderExerciseAssignment
   // answer: WordOrderExerciseAnswer
-} & ExerciseDefinitionCommon
+} & CreatorExerciseDefinitionCommon
 
 export enum Collections {
   Tests = 'tests',
   Exercises = 'exercises',
   CorrectAnswers = 'correctAnswers',
 }
+
+interface TestExerciseStateCommon {
+  description: string
+}
+
+type TestFreeTextExerciseState = {
+  type: ExerciseTypes.FreeText
+  assignment: null
+} & TestExerciseStateCommon
+
+type TestWordOrderExerciseState = {
+  type: ExerciseTypes.WordOrder
+  assignment: Array<string>
+}
+
+export type TestExerciseState = TestFreeTextExerciseState & TestWordOrderExerciseState
+
+export interface TestSpecificExerciseComponentProps {
+  index: number
+}
+
+interface TestSpecificExerciseComponent {
+  (props: TestSpecificExerciseComponentProps): JSX.Element
+}
+
+interface TestExerciseDefinitionCommon {
+  component: TestSpecificExerciseComponent
+}
+
+export type TestFreeTextExerciseDefinition = TestExerciseDefinitionCommon
+
+export type TestWordOrderExerciseDefinition = TestExerciseDefinitionCommon

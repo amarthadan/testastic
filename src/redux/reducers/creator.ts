@@ -1,27 +1,27 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {defaultExerciseType, exerciseTypes} from '../../utils/exercises'
-import {ExerciseState, ExerciseTypes} from '../../types'
+import {defaultExerciseType, creatorExerciseTypes} from '../../utils/creator'
+import {CreatorExerciseState, ExerciseTypes} from '../../types'
 
 type CreatorState = {
-  exercises: Array<ExerciseState>
+  exercises: Array<CreatorExerciseState>
 }
 
-type ExerciseUpdatePayloadCommon = {
+type CreatorExerciseUpdatePayloadCommon = {
   index: number
 }
 
-type ExerciseUpdateTypePayload = {
+type CreatorExerciseUpdateTypePayload = {
   type: ExerciseTypes
-} & ExerciseUpdatePayloadCommon
+} & CreatorExerciseUpdatePayloadCommon
 
-type ExerciseUpdateDescriptionPayload = {
+type CreatorExerciseUpdateDescriptionPayload = {
   description: string
-} & ExerciseUpdatePayloadCommon
+} & CreatorExerciseUpdatePayloadCommon
 
-type ExerciseUpdatePayload = {
-  exercise: ExerciseState
-} & ExerciseUpdatePayloadCommon
+type CreatorExerciseUpdatePayload = {
+  exercise: CreatorExerciseState
+} & CreatorExerciseUpdatePayloadCommon
 
 const initialState: CreatorState = {
   exercises: [],
@@ -32,18 +32,18 @@ const creator = createSlice({
   initialState,
   reducers: {
     addExercise(state) {
-      state.exercises.push(exerciseTypes[defaultExerciseType].emptyState)
+      state.exercises.push(creatorExerciseTypes[defaultExerciseType].emptyState)
     },
     removeExercise(state, action: PayloadAction<number>) {
       state.exercises.splice(action.payload, 1)
     },
-    updateExercise(state, action: PayloadAction<ExerciseUpdatePayload>) {
+    updateExercise(state, action: PayloadAction<CreatorExerciseUpdatePayload>) {
       state.exercises[action.payload.index] = action.payload.exercise
     },
-    updateExerciseType(state, action: PayloadAction<ExerciseUpdateTypePayload>) {
-      state.exercises[action.payload.index] = exerciseTypes[action.payload.type].emptyState
+    updateExerciseType(state, action: PayloadAction<CreatorExerciseUpdateTypePayload>) {
+      state.exercises[action.payload.index] = creatorExerciseTypes[action.payload.type].emptyState
     },
-    updateExerciseDescription(state, action: PayloadAction<ExerciseUpdateDescriptionPayload>) {
+    updateExerciseDescription(state, action: PayloadAction<CreatorExerciseUpdateDescriptionPayload>) {
       state.exercises[action.payload.index].description = action.payload.description
     },
   },

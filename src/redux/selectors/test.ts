@@ -1,8 +1,8 @@
 import {createSelector} from '@reduxjs/toolkit'
 
-import {RootState} from './reducers/root'
+import {RootState} from '../reducers/root'
 
-export const exercisesSelector = (state: RootState) => state.creator.exercises
+export const exercisesSelector = (state: RootState) => state.test.exercises
 
 export const exerciseSelector = createSelector(
   exercisesSelector,

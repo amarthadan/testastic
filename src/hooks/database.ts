@@ -1,14 +1,12 @@
-import {useEffect} from 'react'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 
 import {firebase as firebaseConfig} from '../config'
 import {Collections} from '../types'
 
+// TODO: Not very good hooks. Maybe put inside useEffect?
 export const useInitDB = () => {
-  useEffect(() => {
-    firebase.initializeApp(firebaseConfig)
-  }, [])
+  firebase.initializeApp(firebaseConfig)
 }
 
 export const useCollection = (collection: Collections) => {

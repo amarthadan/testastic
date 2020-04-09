@@ -3,13 +3,13 @@ import {useDispatch} from 'react-redux'
 import {Button, MenuItem, FormGroup, Card, TextArea, ButtonGroup, Intent} from '@blueprintjs/core'
 import {ItemRenderer, Select} from '@blueprintjs/select'
 
-import {exerciseTypes} from '../../utils/exercises'
-import {removeExercise, updateExerciseType, updateExerciseDescription} from '../../redux/reducers/creator'
-import {ExerciseTypes} from '../../types'
+import {creatorExerciseTypes} from '../../../utils/creator'
+import {removeExercise, updateExerciseType, updateExerciseDescription} from '../../../redux/reducers/creator'
+import {ExerciseTypes} from '../../../types'
 
 import './Exercise.scss'
 
-const ExerciseTypeSelect = Select.ofType<ExerciseTypes>()
+const CreatorExerciseTypeSelect = Select.ofType<ExerciseTypes>()
 
 const renderType: ItemRenderer<ExerciseTypes> = (exerciseType, {handleClick, modifiers}) => {
   if (!modifiers.matchesPredicate) {
@@ -20,7 +20,7 @@ const renderType: ItemRenderer<ExerciseTypes> = (exerciseType, {handleClick, mod
       active={modifiers.active}
       key={exerciseType}
       onClick={handleClick}
-      text={exerciseTypes[exerciseType].name}
+      text={creatorExerciseTypes[exerciseType].name}
     />
   )
 }
@@ -36,7 +36,7 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
   const [disabled, setDisabled] = useState(false)
   const [doneButtonIntent, setDoneButtonIntent] = useState<Intent>(Intent.PRIMARY)
 
-  const SpecificExercise = exerciseTypes[type].component
+  const SpecificExercise = creatorExerciseTypes[type].component
 
   const markAsDone = () => {
     setDoneButtonIntent(Intent.SUCCESS)
@@ -52,12 +52,12 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
   }
 
   return (
-    <Card className="exercise">
+    <Card className="creator-exercise">
       <Button minimal intent="danger" icon="trash" className="remove-button" onClick={remove} />
       <FormGroup label="Exercise type:" inline disabled={disabled}>
         {/* TODO: findDOMNode is deprecated in StrictMode error (see console) */}
         {/* TODO: last selected item is not highligted */}
-        <ExerciseTypeSelect
+        <CreatorExerciseTypeSelect
           items={Object.values(ExerciseTypes)}
           itemRenderer={renderType}
           onItemSelect={(selectedType) => {
@@ -67,8 +67,8 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
           popoverProps={{minimal: true}}
           disabled={disabled}
         >
-          <Button text={exerciseTypes[type].name} rightIcon="caret-down" disabled={disabled} />
-        </ExerciseTypeSelect>
+          <Button text={creatorExerciseTypes[type].name} rightIcon="caret-down" disabled={disabled} />
+        </CreatorExerciseTypeSelect>
       </FormGroup>
       <FormGroup label="Description:" disabled={disabled}>
         <TextArea

@@ -1,17 +1,22 @@
-import WordOrderExercise from '../components/exercises/WordOrderExercise'
+import WordOrderExercise from '../components/exercises/creator/WordOrderExercise'
 import {shuffle} from './common'
-import {ExerciseTypes, FreeTextExerciseDefinition, WordOrderExerciseDefinition, ExerciseState} from '../types'
+import {
+  ExerciseTypes,
+  CreatorFreeTextExerciseDefinition,
+  CreatorWordOrderExerciseDefinition,
+  CreatorExerciseState,
+} from '../types'
 
 type Exercises = {
-  [ExerciseTypes.FreeText]: FreeTextExerciseDefinition
-  [ExerciseTypes.WordOrder]: WordOrderExerciseDefinition
+  [ExerciseTypes.FreeText]: CreatorFreeTextExerciseDefinition
+  [ExerciseTypes.WordOrder]: CreatorWordOrderExerciseDefinition
 }
 
 // TODO: come up with better solution
 
 // const empty = () => null
 
-export const exerciseTypes: Exercises = {
+export const creatorExerciseTypes: Exercises = {
   [ExerciseTypes.FreeText]: {
     name: 'Free Text',
     component: null,
@@ -35,7 +40,7 @@ export const exerciseTypes: Exercises = {
   },
 }
 
-export const buildAssignment = (exercise: ExerciseState) => {
+export const buildAssignment = (exercise: CreatorExerciseState) => {
   switch (exercise.type) {
     case ExerciseTypes.FreeText:
       return null
@@ -44,7 +49,7 @@ export const buildAssignment = (exercise: ExerciseState) => {
   }
 }
 
-export const buildAnswer = (exercise: ExerciseState) => {
+export const buildAnswer = (exercise: CreatorExerciseState) => {
   switch (exercise.type) {
     case ExerciseTypes.FreeText:
       return null

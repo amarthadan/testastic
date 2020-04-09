@@ -5,6 +5,7 @@ import {H1} from '@blueprintjs/core'
 
 import HomeScreen from './components/screens/HomeScreen'
 import NewTestScreen from './components/screens/NewTestScreen'
+import TestScreen from './components/screens/TestScreen'
 
 import {useInitDB} from './hooks/database'
 import store from './redux/store'
@@ -20,9 +21,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/create" component={NewTestScreen} />
-          <Route path="/tests/:id">
-            <H1>Dummy test page</H1>
-          </Route>
+          <Route path="/tests/:id" component={TestScreen} />
           <Route path="/results/:id">
             <H1>Dummy results page</H1>
           </Route>

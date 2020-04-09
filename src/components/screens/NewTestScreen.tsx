@@ -2,14 +2,14 @@ import React, {useState} from 'react'
 import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent, H2} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {exercisesSelector} from '../../redux/selectors'
+import {exercisesSelector} from '../../redux/selectors/creator'
 import {addExercise} from '../../redux/reducers/creator'
 import {generateIdentifier} from '../../utils/common'
-import {buildAnswer, buildAssignment} from '../../utils/exercises'
+import {buildAnswer, buildAssignment} from '../../utils/creator'
 import {useCollection} from '../../hooks/database'
 import {Collections} from '../../types'
 
-import Exercise from '../exercises/Exercise'
+import Exercise from '../exercises/creator/Exercise'
 import Toaster from '../common/Toaster'
 import Working from '../common/Working'
 
