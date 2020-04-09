@@ -11,5 +11,12 @@ service cloud.firestore {
     match /correctAnswers/{document} {
       allow read, write: if true;
     }
+    match /answers/{answer} {
+      allow read, write: if true;
+
+      match /exercises/{exercise} {
+        allow read, write: if true;
+      }
+    }
   }
 }

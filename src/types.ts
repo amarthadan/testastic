@@ -66,9 +66,11 @@ export enum Collections {
   Tests = 'tests',
   Exercises = 'exercises',
   CorrectAnswers = 'correctAnswers',
+  Answers = 'answers',
 }
 
 interface TestExerciseStateCommon {
+  id: string
   description: string
 }
 

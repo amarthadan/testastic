@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import {useParams} from 'react-router-dom'
-import {H1, ButtonGroup, Button, FormGroup, InputGroup} from '@blueprintjs/core'
+import {useParams, useHistory} from 'react-router-dom'
+import {H1, ButtonGroup, Button, FormGroup, InputGroup, Intent} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
 
 import Working from '../common/Working'
@@ -11,9 +11,11 @@ import {setExercises} from '../../redux/reducers/test'
 import {Collections, TestExerciseState} from '../../types'
 
 import './TestScreen.scss'
+import Toaster from '../common/Toaster'
 
 const TestScreen = () => {
   const dispatch = useDispatch()
+  const {push} = useHistory()
   const exercises = useSelector(exercisesSelector)
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
@@ -21,6 +23,7 @@ const TestScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const testsCollection = useCollection(Collections.Tests)
+  const answersCollection = useCollection(Collections.Answers)
   const {id} = useParams()
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +51,7 @@ const TestScreen = () => {
         querySnapshot.forEach((exerciseDocument) => {
           const data = exerciseDocument.data()
           const exercise = {
+            id: exerciseDocument.id,
             type: data.type,
             description: data.description,
             assignment: data.assignment,
@@ -70,10 +74,43 @@ const TestScreen = () => {
       console.error(error)
       setWorking(false)
       // TODO: Add error toast
-    } finally {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
+
+  const submit = async () => {
+    setWorking(true)
+
+    const answerDocument = {
+      name,
+      email,
+      testId: id,
+      timestamp: Date.now(),
+    }
+
+    try {
+      const answerDocumentRef = await answersCollection.add(answerDocument)
+
+      for (let i = 0; i < exercises.length; i++) {
+        const exercise = exercises[i]
+        const exerciseDocument = {
+          answer: exercise.answer,
+        }
+
+        await answerDocumentRef.collection(Collections.Exercises).doc(exercise.id).set(exerciseDocument)
+      }
+
+      push(`/answers/${answerDocumentRef.id}`)
+    } catch (error) {
+      console.error(error)
+      Toaster.show({
+        intent: Intent.DANGER,
+        message: `A problem occured during the test submission. Please, try again later. Error: ${error}`,
+      })
+    } finally {
+      setWorking(false)
+    }
+  }
 
   return (
     <div className="test">
@@ -98,7 +135,7 @@ const TestScreen = () => {
             ))}
           </div>
           <ButtonGroup className="submit-test">
-            <Button large intent="success" icon="tick" text="Submit test" />
+            <Button large intent="success" icon="tick" text="Submit test" onClick={submit} />
           </ButtonGroup>
         </>
       )}
