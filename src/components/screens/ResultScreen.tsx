@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom'
 import {H1} from '@blueprintjs/core'
 
 import Working from '../common/Working'
+import Exercise from '../exercises/result/Exercise'
 import {useCollection} from '../../hooks/database'
 import {Collections, ResultExerciseState} from '../../types'
 
@@ -11,8 +12,9 @@ import './ResultScreen.scss'
 const ResultScreen = () => {
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
-  const [creator, setCreator] = useState('')
-  const [tested, setTested] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [date, setDate] = useState(0)
   const [exercises, setExercises] = useState<Array<ResultExerciseState>>([])
   const testsCollection = useCollection(Collections.Tests)
   const answersCollection = useCollection(Collections.Answers)
@@ -27,7 +29,9 @@ const ResultScreen = () => {
       if (answerDocument.exists) {
         const answerData = answerDocument.data()
         if (answerData) {
-          setTested(answerData.name)
+          setName(answerData.name)
+          setEmail(answerData.email)
+          setDate(answerData.timestamp)
 
           const testId = answerData.testId
           const testDocumentRef = testsCollection.doc(testId)
@@ -37,7 +41,6 @@ const ResultScreen = () => {
             const testData = testDocument.data()
             if (testData) {
               setTitle(testData.title)
-              setCreator(testData.name)
             }
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -111,11 +114,12 @@ const ResultScreen = () => {
       ) : (
         <>
           <H1>{title}</H1>
-          <p>Creator: {creator}</p>
-          <p>Tested: {tested}</p>
+          <p>Name: {name}</p>
+          <p>Email: {email}</p>
+          <p>Date: {new Date(date).toUTCString()}</p>
           <div className="exercises">
-            {exercises.map((_, index) => (
-              <div key={index} />
+            {exercises.map((exercise, index) => (
+              <Exercise key={index} exercise={exercise} />
             ))}
           </div>
         </>
