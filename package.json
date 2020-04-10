@@ -19,6 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "build-fix": "./build-fix.sh",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
