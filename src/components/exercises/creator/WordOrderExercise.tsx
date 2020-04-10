@@ -9,7 +9,7 @@ import {updateExercise} from '../../../redux/reducers/creator'
 
 import './WordOrderExercise.scss'
 
-const WordOrderExercise = ({disabled, index}: CreatorSpecificExerciseComponentProps) => {
+const WordOrderExercise = ({index}: CreatorSpecificExerciseComponentProps) => {
   const dispatch = useDispatch()
   // TODO: come up with better solution
   const exercise = useSelector((state: RootState) => exerciseSelector(state, index)) as CreatorWordOrderExerciseState
@@ -19,8 +19,8 @@ const WordOrderExercise = ({disabled, index}: CreatorSpecificExerciseComponentPr
   }
 
   return (
-    <FormGroup label="Sentence:" inline contentClassName="sentence-input" disabled={disabled}>
-      <InputGroup fill disabled={disabled} onChange={handleSentenceChange} />
+    <FormGroup label="Sentence:" inline contentClassName="sentence-input">
+      <InputGroup fill onChange={handleSentenceChange} />
     </FormGroup>
   )
 }

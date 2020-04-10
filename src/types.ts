@@ -7,7 +7,6 @@ export enum ExerciseTypes {
 
 export interface CreatorSpecificExerciseComponentProps {
   index: number
-  disabled: boolean
 }
 
 interface CreatorSpecificExerciseComponent {
