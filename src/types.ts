@@ -103,3 +103,22 @@ interface TestExerciseDefinitionCommon {
 export type TestFreeTextExerciseDefinition = TestExerciseDefinitionCommon
 
 export type TestWordOrderExerciseDefinition = TestExerciseDefinitionCommon
+
+type ResultExerciseStateCommon = {
+  description: string
+}
+
+export type ResultFreeTextExerciseState = {
+  type: ExerciseTypes.FreeText
+  assignment: null
+  answer?: string
+} & ResultExerciseStateCommon
+
+export type ResultWordOrderExerciseState = {
+  type: ExerciseTypes.WordOrder
+  assignment: Array<string>
+  answer?: Array<string>
+  correctAnswer: Array<string>
+} & ResultExerciseStateCommon
+
+export type ResultExerciseState = ResultFreeTextExerciseState | ResultWordOrderExerciseState
