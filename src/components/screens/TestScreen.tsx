@@ -92,7 +92,6 @@ const TestScreen = () => {
   })
 
   const submit = async (name: string, email: string) => {
-    // FIX: Error when exercise input is empty
     setWorking(true)
 
     const answerDocument = {
@@ -108,7 +107,7 @@ const TestScreen = () => {
       for (let i = 0; i < exercises.length; i++) {
         const exercise = exercises[i]
         const exerciseDocument = {
-          answer: exercise.answer,
+          answer: exercise.answer || null,
         }
 
         await answerDocumentRef.collection(Collections.Exercises).doc(exercise.id).set(exerciseDocument)
