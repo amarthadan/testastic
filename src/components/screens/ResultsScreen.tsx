@@ -4,9 +4,10 @@ import {useParams, useHistory} from 'react-router-dom'
 import {useCollection} from '../../hooks/database'
 import {Collections} from '../../types'
 import Working from '../common/Working'
-import {H1, HTMLTable} from '@blueprintjs/core'
+import {H1, HTMLTable, Intent} from '@blueprintjs/core'
 
 import './ResultsScreen.scss'
+import Toaster from '../common/Toaster'
 
 type Result = {
   id: string
@@ -56,8 +57,11 @@ const ResultsScreen = () => {
       fetchResults()
     } catch (error) {
       console.error(error)
+      Toaster.show({
+        intent: Intent.DANGER,
+        message: `A problem occured while loading the results. Please, try again later. Error: ${error}`,
+      })
       setWorking(false)
-      // TODO: Add error toast
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])

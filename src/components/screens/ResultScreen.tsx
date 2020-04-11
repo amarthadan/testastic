@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {H1} from '@blueprintjs/core'
+import {H1, Intent} from '@blueprintjs/core'
 
 import Working from '../common/Working'
 import Exercise from '../exercises/result/Exercise'
@@ -8,6 +8,7 @@ import {useCollection} from '../../hooks/database'
 import {Collections, ResultExerciseState} from '../../types'
 
 import './ResultScreen.scss'
+import Toaster from '../common/Toaster'
 
 const ResultScreen = () => {
   const [working, setWorking] = useState(true)
@@ -100,8 +101,11 @@ const ResultScreen = () => {
       fetchResults()
     } catch (error) {
       console.error(error)
+      Toaster.show({
+        intent: Intent.DANGER,
+        message: `A problem occured while loading the results. Please, try again later. Error: ${error}`,
+      })
       setWorking(false)
-      // TODO: Add error toast
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])

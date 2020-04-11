@@ -78,8 +78,11 @@ const TestScreen = () => {
       fetchTest()
     } catch (error) {
       console.error(error)
+      Toaster.show({
+        intent: Intent.DANGER,
+        message: `A problem occured while loading the test. Please, try again later. Error: ${error}`,
+      })
       setWorking(false)
-      // TODO: Add error toast
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
