@@ -89,6 +89,7 @@ const TestScreen = () => {
   })
 
   const submit = async (name: string, email: string) => {
+    // FIX: Error when exercise input is empty
     setWorking(true)
 
     const answerDocument = {

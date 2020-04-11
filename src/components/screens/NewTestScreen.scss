@@ -1,4 +1,6 @@
 .new-test {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding-top: 15px;
   width: 60%;
@@ -28,5 +30,9 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+  }
+
+  .add-button {
+    align-self: flex-end;
   }
 }

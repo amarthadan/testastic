@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent, H2} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -32,6 +33,7 @@ type FormData = {
 
 const NewTestScreen = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const exercises = useSelector(exercisesSelector)
   const [working, setWorking] = useState(false)
   const [created, setCreated] = useState(false)
@@ -116,7 +118,11 @@ const NewTestScreen = () => {
             You can access the results here:
             <Link to={`/results/${resultsId}`}>{`${window.location.origin}/results/${resultsId}`}</Link>
           </p>
-          {/* TODO: Add new test button */}
+          <div className="add-button">
+            <Button large intent="primary" icon="add" onClick={() => history.go(0)}>
+              New test
+            </Button>
+          </div>
         </>
       ) : (
         <>
