@@ -17,6 +17,7 @@ const ResultScreen = () => {
   const [email, setEmail] = useState('')
   const [date, setDate] = useState(0)
   const [exercises, setExercises] = useState<Array<ResultExerciseState>>([])
+  const [notFound, setNotFound] = useState(false)
   const testsCollection = useCollection(Collections.Tests)
   const answersCollection = useCollection(Collections.Answers)
   const correctAnswersCollection = useCollection(Collections.CorrectAnswers)
@@ -91,7 +92,7 @@ const ResultScreen = () => {
           }
         }
       } else {
-        // TODO: No such answer
+        setNotFound(true)
       }
 
       setWorking(false)
@@ -115,6 +116,8 @@ const ResultScreen = () => {
       <Working show={working} />
       {working ? (
         <></>
+      ) : notFound ? (
+        <H1>Results not found</H1>
       ) : (
         <>
           <H1>{title}</H1>

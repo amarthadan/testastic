@@ -32,6 +32,7 @@ const TestScreen = () => {
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
   const [creator, setCreator] = useState('')
+  const [notFound, setNotFound] = useState(false)
   const testsCollection = useCollection(Collections.Tests)
   const answersCollection = useCollection(Collections.Answers)
   const {id} = useParams()
@@ -68,7 +69,7 @@ const TestScreen = () => {
 
         dispatch(setExercises(exerciseDocuments))
       } else {
-        // TODO: No such test
+        setNotFound(true)
       }
 
       setWorking(false)
@@ -130,6 +131,8 @@ const TestScreen = () => {
       <Working show={working} />
       {working ? (
         <></>
+      ) : notFound ? (
+        <H1>Test not found</H1>
       ) : (
         <>
           <H1>{title}</H1>

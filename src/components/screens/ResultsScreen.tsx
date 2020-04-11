@@ -20,6 +20,7 @@ const ResultsScreen = () => {
   const [results, setResults] = useState<Array<Result>>([])
   const [title, setTitle] = useState('')
   const [working, setWorking] = useState(true)
+  const [notFound, setNotFound] = useState(false)
   const {push} = useHistory()
   const testsCollection = useCollection(Collections.Tests)
   const answersCollection = useCollection(Collections.Answers)
@@ -34,6 +35,12 @@ const ResultsScreen = () => {
         testId = testDocument.id
         setTitle(testDocument.data().title)
       })
+
+      if (!testId) {
+        setNotFound(true)
+        setWorking(false)
+        return
+      }
 
       const results: Array<Result> = []
       querySnapshot = await answersCollection.where('testId', '==', testId).orderBy('timestamp').get()
@@ -75,6 +82,8 @@ const ResultsScreen = () => {
       <Working show={working} />
       {working ? (
         <></>
+      ) : notFound ? (
+        <H1>Results not found</H1>
       ) : (
         <>
           <H1>{title}</H1>
