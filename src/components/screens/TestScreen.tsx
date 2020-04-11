@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
 import {H1, ButtonGroup, Button, FormGroup, InputGroup, Intent} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
+import {useForm, Controller} from 'react-hook-form'
+import * as yup from 'yup'
 
 import Working from '../common/Working'
 import Exercise from '../exercises/test/Exercise'
@@ -13,6 +15,16 @@ import {Collections, TestExerciseState} from '../../types'
 import './TestScreen.scss'
 import Toaster from '../common/Toaster'
 
+const schema = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().required().email(),
+})
+
+type FormData = {
+  name: string
+  email: string
+}
+
 const TestScreen = () => {
   const dispatch = useDispatch()
   const {push} = useHistory()
@@ -20,19 +32,13 @@ const TestScreen = () => {
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
   const [creator, setCreator] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
   const testsCollection = useCollection(Collections.Tests)
   const answersCollection = useCollection(Collections.Answers)
   const {id} = useParams()
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
+  const {handleSubmit, control, errors, formState} = useForm<FormData>({
+    validationSchema: schema,
+    mode: 'onChange',
+  })
 
   useEffect(() => {
     setWorking(true)
@@ -78,7 +84,11 @@ const TestScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
-  const submit = async () => {
+  const onSubmit = handleSubmit(({name, email}) => {
+    submit(name, email)
+  })
+
+  const submit = async (name: string, email: string) => {
     setWorking(true)
 
     const answerDocument = {
@@ -121,22 +131,43 @@ const TestScreen = () => {
         <>
           <H1>{title}</H1>
           <p>Creator: {creator}</p>
-          <div className="form-area">
-            <FormGroup label="Name:" labelFor="name-input" inline>
-              <InputGroup id="name-input" value={name} onChange={handleNameChange} />
-            </FormGroup>
-            <FormGroup label="Email:" labelFor="email-input" inline>
-              <InputGroup id="email-input" value={email} onChange={handleEmailChange} />
-            </FormGroup>
-          </div>
-          <div className="exercises">
-            {exercises.map((exercise, index) => (
-              <Exercise key={index} type={exercise.type} description={exercise.description} index={index} />
-            ))}
-          </div>
-          <ButtonGroup className="submit-test">
-            <Button large intent="success" icon="tick" text="Submit test" onClick={submit} />
-          </ButtonGroup>
+          <form onSubmit={onSubmit}>
+            <div className="form-area">
+              <FormGroup label="Name:" labelFor="name" inline>
+                <Controller
+                  as={InputGroup}
+                  name="name"
+                  control={control}
+                  id="name"
+                  intent={errors.name && Intent.DANGER}
+                />
+              </FormGroup>
+              <FormGroup label="Email:" labelFor="email" inline>
+                <Controller
+                  as={InputGroup}
+                  name="email"
+                  control={control}
+                  id="email"
+                  intent={errors.email && Intent.DANGER}
+                />
+              </FormGroup>
+            </div>
+            <div className="exercises">
+              {exercises.map((exercise, index) => (
+                <Exercise key={index} type={exercise.type} description={exercise.description} index={index} />
+              ))}
+            </div>
+            <ButtonGroup className="submit-test">
+              <Button
+                large
+                intent="success"
+                icon="tick"
+                text="Submit test"
+                type="submit"
+                disabled={!formState.isValid}
+              />
+            </ButtonGroup>
+          </form>
         </>
       )}
     </div>

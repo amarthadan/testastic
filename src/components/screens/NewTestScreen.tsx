@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent, H2} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
+import {useForm, Controller} from 'react-hook-form'
+import * as yup from 'yup'
 
 import {exercisesSelector} from '../../redux/selectors/creator'
 import {addExercise} from '../../redux/reducers/creator'
@@ -16,36 +18,41 @@ import Working from '../common/Working'
 import './NewTestScreen.scss'
 import {Link} from 'react-router-dom'
 
+const schema = yup.object().shape({
+  title: yup.string().required(),
+  name: yup.string().required(),
+  email: yup.string().required().email(),
+})
+
+type FormData = {
+  title: string
+  name: string
+  email: string
+}
+
 const NewTestScreen = () => {
   const dispatch = useDispatch()
   const exercises = useSelector(exercisesSelector)
-  const [title, setTitle] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
   const [working, setWorking] = useState(false)
   const [created, setCreated] = useState(false)
   const [resultsId, setResultsId] = useState<string>()
   const [testId, setTestId] = useState<string>()
   const testsCollection = useCollection(Collections.Tests)
   const correctAnswersCollection = useCollection(Collections.CorrectAnswers)
-
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value)
-  }
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
+  const {handleSubmit, control, errors, formState} = useForm<FormData>({
+    validationSchema: schema,
+    mode: 'onChange',
+  })
 
   const add = () => {
     dispatch(addExercise())
   }
 
-  const build = async () => {
+  const onSubmit = handleSubmit(({title, name, email}) => {
+    build(title, name, email)
+  })
+
+  const build = async (title: string, name: string, email: string) => {
     setWorking(true)
 
     const testDocument = {
@@ -114,30 +121,56 @@ const NewTestScreen = () => {
       ) : (
         <>
           <H1>New Test</H1>
-          {/* TODO: Form vaidation */}
           {/* TODO: Form validation for exercise inputs */}
-          <div className="form-area">
-            <FormGroup label="Title:" labelFor="title-input" inline>
-              <InputGroup id="title-input" value={title} onChange={handleTitleChange} />
-            </FormGroup>
-            <FormGroup label="Name:" labelFor="name-input" inline>
-              <InputGroup id="name-input" value={name} onChange={handleNameChange} />
-            </FormGroup>
-            <FormGroup label="Email:" labelFor="email-input" inline>
-              <InputGroup id="email-input" value={email} onChange={handleEmailChange} />
-            </FormGroup>
-          </div>
-          <div className="exercises">
-            {exercises.map((exercise, index) => (
-              <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
-            ))}
-            <ButtonGroup className="add-exercise" onClick={add}>
-              <Button large intent="primary" icon="add" text="Add exercise" />
+          <form onSubmit={onSubmit}>
+            <div className="form-area">
+              <FormGroup label="Title:" labelFor="title" inline>
+                <Controller
+                  as={InputGroup}
+                  name="title"
+                  control={control}
+                  id="title"
+                  intent={errors.title && Intent.DANGER}
+                />
+              </FormGroup>
+              <FormGroup label="Name:" labelFor="name" inline>
+                <Controller
+                  as={InputGroup}
+                  name="name"
+                  control={control}
+                  id="name"
+                  intent={errors.name && Intent.DANGER}
+                />
+              </FormGroup>
+              <FormGroup label="Email:" labelFor="email" inline>
+                <Controller
+                  as={InputGroup}
+                  name="email"
+                  control={control}
+                  id="email"
+                  intent={errors.email && Intent.DANGER}
+                />
+              </FormGroup>
+            </div>
+            <div className="exercises">
+              {exercises.map((exercise, index) => (
+                <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
+              ))}
+              <ButtonGroup className="add-exercise" onClick={add}>
+                <Button large intent="primary" icon="add" text="Add exercise" />
+              </ButtonGroup>
+            </div>
+            <ButtonGroup className="build-test">
+              <Button
+                large
+                intent="success"
+                icon="build"
+                text="Build test"
+                type="submit"
+                disabled={!formState.isValid}
+              />
             </ButtonGroup>
-          </div>
-          <ButtonGroup className="build-test" onClick={build}>
-            <Button large intent="success" icon="build" text="Build test" />
-          </ButtonGroup>
+          </form>
           <Working show={working} />
         </>
       )}
