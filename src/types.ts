@@ -3,6 +3,7 @@
 export enum ExerciseTypes {
   FreeText = 'FREE_TEXT',
   WordOrder = 'WORD_ORDER',
+  Choice = 'CHOICE',
 }
 
 export interface CreatorSpecificExerciseComponentProps {
@@ -26,7 +27,17 @@ export type CreatorWordOrderExerciseState = {
   sentence: string
 } & CreatorExerciseStateCommon
 
-export type CreatorExerciseState = CreatorFreeTextExerciseState | CreatorWordOrderExerciseState
+export type CreatorChoiceExerciseState = {
+  type: ExerciseTypes.Choice
+  question: string
+  answers: Array<string>
+  correctAnswer: string
+} & CreatorExerciseStateCommon
+
+export type CreatorExerciseState =
+  | CreatorFreeTextExerciseState
+  | CreatorWordOrderExerciseState
+  | CreatorChoiceExerciseState
 
 interface CreatorExerciseDefinitionCommon {
   name: string
@@ -61,6 +72,10 @@ export type CreatorWordOrderExerciseDefinition = {
   // answer: WordOrderExerciseAnswer
 } & CreatorExerciseDefinitionCommon
 
+export type CreatorChoiceExerciseDefinition = {
+  emptyState: CreatorChoiceExerciseState
+} & CreatorExerciseDefinitionCommon
+
 export enum Collections {
   Tests = 'tests',
   Exercises = 'exercises',
@@ -85,7 +100,18 @@ export type TestWordOrderExerciseState = {
   answer?: Array<string>
 } & TestExerciseStateCommon
 
-export type TestExerciseState = TestFreeTextExerciseState | TestWordOrderExerciseState
+type TestChoiceExerciseStateAssignment = {
+  question: string
+  answers: Array<string>
+}
+
+export type TestChoiceExerciseState = {
+  type: ExerciseTypes.Choice
+  assignment: TestChoiceExerciseStateAssignment
+  answer?: string
+} & TestExerciseStateCommon
+
+export type TestExerciseState = TestFreeTextExerciseState | TestWordOrderExerciseState | TestChoiceExerciseState
 
 export interface TestSpecificExerciseComponentProps {
   index: number
@@ -102,6 +128,8 @@ interface TestExerciseDefinitionCommon {
 export type TestFreeTextExerciseDefinition = TestExerciseDefinitionCommon
 
 export type TestWordOrderExerciseDefinition = TestExerciseDefinitionCommon
+
+export type TestChoiceExerciseDefinition = TestExerciseDefinitionCommon
 
 type ResultExerciseStateCommon = {
   description: string
@@ -120,4 +148,11 @@ export type ResultWordOrderExerciseState = {
   correctAnswer: Array<string>
 } & ResultExerciseStateCommon
 
-export type ResultExerciseState = ResultFreeTextExerciseState | ResultWordOrderExerciseState
+export type ResultChoiceExerciseState = {
+  type: ExerciseTypes.Choice
+  assignment: TestChoiceExerciseStateAssignment
+  answer?: string
+  correctAnswer: string
+} & ResultExerciseStateCommon
+
+export type ResultExerciseState = ResultFreeTextExerciseState | ResultWordOrderExerciseState | ResultChoiceExerciseState

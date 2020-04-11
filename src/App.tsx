@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
-import {H1} from '@blueprintjs/core'
+import {H1, FocusStyleManager} from '@blueprintjs/core'
 
 import HomeScreen from './components/screens/HomeScreen'
 import NewTestScreen from './components/screens/NewTestScreen'
@@ -16,6 +16,7 @@ import './App.scss'
 
 function App() {
   useInitDB()
+  FocusStyleManager.onlyShowFocusOnTabs()
 
   return (
     <Provider store={store}>
