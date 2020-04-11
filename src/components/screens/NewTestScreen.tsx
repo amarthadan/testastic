@@ -111,12 +111,12 @@ const NewTestScreen = () => {
           <p>
             {/* TODO: Add copy button for link */}
             You can access your test here:
-            <Link to={`/tests/${testId}`}>{`${window.location.origin}/tests/${testId}`}</Link>
+            <Link to={`/tests/${testId}`} target="_blank">{`${window.location.origin}/tests/${testId}`}</Link>
           </p>
           <p>
             {/* TODO: Add copy button for link */}
             You can access the results here:
-            <Link to={`/results/${resultsId}`}>{`${window.location.origin}/results/${resultsId}`}</Link>
+            <Link to={`/results/${resultsId}`} target="_blank">{`${window.location.origin}/results/${resultsId}`}</Link>
           </p>
           <div className="add-button">
             <Button large intent="primary" icon="add" onClick={() => history.go(0)}>
