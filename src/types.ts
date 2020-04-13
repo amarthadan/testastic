@@ -1,5 +1,7 @@
 // TODO: proper typing - bind exercise type with exercise specific properties
 
+import {RawDraftContentState} from 'draft-js'
+
 export enum ExerciseTypes {
   FreeText = 'FREE_TEXT',
   WordOrder = 'WORD_ORDER',
@@ -91,7 +93,7 @@ interface TestExerciseStateCommon {
 export type TestFreeTextExerciseState = {
   type: ExerciseTypes.FreeText
   assignment: null
-  answer?: string
+  answer?: RawDraftContentState
 } & TestExerciseStateCommon
 
 export type TestWordOrderExerciseState = {
@@ -138,7 +140,7 @@ type ResultExerciseStateCommon = {
 export type ResultFreeTextExerciseState = {
   type: ExerciseTypes.FreeText
   assignment: null
-  answer?: string
+  answer?: RawDraftContentState
 } & ResultExerciseStateCommon
 
 export type ResultWordOrderExerciseState = {

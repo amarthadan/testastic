@@ -1,15 +1,14 @@
 import React from 'react'
-import {Label, Callout, Intent} from '@blueprintjs/core'
+import {Label} from '@blueprintjs/core'
 
+import Editor from '../../common/Editor'
 import {ResultFreeTextExerciseState} from '../../../types'
 
 const FreeTextExercise = ({answer}: ResultFreeTextExerciseState) => {
   return (
     <>
       <Label>Answer:</Label>
-      <Callout intent={Intent.PRIMARY} icon={null}>
-        {answer}
-      </Callout>
+      <Editor readonly rawInitialState={answer} />
     </>
   )
 }

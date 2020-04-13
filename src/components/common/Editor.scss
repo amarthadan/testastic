@@ -1,0 +1,29 @@
+.editor {
+  .buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  // TODO: Use style from blueprint instead
+  // TODO: Add focus color on click
+  // TODO: Text cursor for the whole area
+  .textarea {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
+    color: #182026;
+    font-size: 14px;
+    font-weight: 400;
+    min-height: 90px;
+    outline: none;
+    padding: 10px;
+    transition: -webkit-box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    transition: box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    transition: box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9), -webkit-box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    vertical-align: middle;
+
+    &.readonly {
+      box-shadow: none;
+    }
+  }
+}
