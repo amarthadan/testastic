@@ -1,3 +1,5 @@
+import {convertToRaw, EditorState} from 'draft-js'
+
 import WordOrderExercise from '../components/exercises/creator/WordOrderExercise'
 import ChoiceExercise from '../components/exercises/creator/ChoiceExercise'
 import {shuffle} from './common'
@@ -7,12 +9,15 @@ import {
   CreatorWordOrderExerciseDefinition,
   CreatorExerciseState,
   CreatorChoiceExerciseDefinition,
+  CreatorGapFillExerciseDefinition,
 } from '../types'
+import GapFillExercise from '../components/exercises/creator/GapFillExercise'
 
 type Exercises = {
   [ExerciseTypes.FreeText]: CreatorFreeTextExerciseDefinition
   [ExerciseTypes.WordOrder]: CreatorWordOrderExerciseDefinition
   [ExerciseTypes.Choice]: CreatorChoiceExerciseDefinition
+  [ExerciseTypes.GapFill]: CreatorGapFillExerciseDefinition
 }
 
 // TODO: come up with better solution
@@ -52,6 +57,16 @@ export const creatorExerciseTypes: Exercises = {
       correctAnswer: '',
     },
   },
+  [ExerciseTypes.GapFill]: {
+    name: 'Gap Fill',
+    component: GapFillExercise,
+    emptyState: {
+      type: ExerciseTypes.GapFill,
+      description: '',
+      text: convertToRaw(EditorState.createEmpty().getCurrentContent()),
+      answers: {},
+    },
+  },
 }
 
 export const buildAssignment = (exercise: CreatorExerciseState) => {
@@ -65,6 +80,8 @@ export const buildAssignment = (exercise: CreatorExerciseState) => {
         question: exercise.question,
         answers: exercise.answers,
       }
+    case ExerciseTypes.GapFill:
+      return exercise.text
   }
 }
 
@@ -76,6 +93,8 @@ export const buildAnswer = (exercise: CreatorExerciseState) => {
       return exercise.sentence.split(' ')
     case ExerciseTypes.Choice:
       return exercise.correctAnswer
+    case ExerciseTypes.GapFill:
+      return exercise.answers
   }
 }
 

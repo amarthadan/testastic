@@ -5,6 +5,7 @@ import FreeTextExercise from '../components/exercises/result/FreeTextExercise'
 import WordOrderExercise from '../components/exercises/result/WordOrderExercise'
 import {ResultExerciseState, ExerciseTypes} from '../types'
 import ChoiceExercise from '../components/exercises/result/ChoiceExercise'
+import GapFillExercise from '../components/exercises/result/GapFillExercise'
 
 export const specificExercise = (exercise: ResultExerciseState) => {
   switch (exercise.type) {
@@ -30,6 +31,16 @@ export const specificExercise = (exercise: ResultExerciseState) => {
     case ExerciseTypes.Choice:
       return () => (
         <ChoiceExercise
+          type={exercise.type}
+          description={exercise.description}
+          assignment={exercise.assignment}
+          answer={exercise.answer}
+          correctAnswer={exercise.correctAnswer}
+        />
+      )
+    case ExerciseTypes.GapFill:
+      return () => (
+        <GapFillExercise
           type={exercise.type}
           description={exercise.description}
           assignment={exercise.assignment}

@@ -1,22 +1,52 @@
-import React, {useState, useRef} from 'react'
-import {Editor as DraftEditor, EditorState, RichUtils, RawDraftContentState, convertFromRaw} from 'draft-js'
+import React, {useState, useRef, useEffect} from 'react'
+import {
+  Editor as DraftEditor,
+  EditorState,
+  RichUtils,
+  RawDraftContentState,
+  convertFromRaw,
+  CompositeDecorator,
+} from 'draft-js'
+import {ButtonGroup, Button, Divider, IconName} from '@blueprintjs/core'
 
 import './Editor.scss'
-import {ButtonGroup, Button, Divider, Classes} from '@blueprintjs/core'
 
-type EditorProps = {
-  onChange?: (state: EditorState) => void
-  rawInitialState?: RawDraftContentState
-  readonly?: boolean
+export type EditorButton = {
+  text?: string
+  icon?: IconName
+  disabled?: boolean
+  onMouseDown: (state: EditorState) => EditorState
+  onStateChange?: (state: EditorState) => void
 }
 
-const Editor = ({onChange, rawInitialState, readonly}: EditorProps) => {
-  const initialState = rawInitialState ? EditorState.createWithContent(convertFromRaw(rawInitialState)) : null
+type EditorProps = {
+  onChange?: (state: EditorState, answers?: Record<string, string>) => void
+  rawInitialState?: RawDraftContentState
+  readonly?: boolean
+  result?: boolean
+  decorator?: CompositeDecorator
+  buttons?: Array<EditorButton>
+}
+
+const Editor = ({onChange, rawInitialState, readonly, result, decorator, buttons}: EditorProps) => {
+  const initialState = rawInitialState
+    ? EditorState.createWithContent(convertFromRaw(rawInitialState), decorator)
+    : EditorState.createEmpty(decorator)
   const editorRef = useRef<DraftEditor>(null)
-  const [editorState, setEditorState] = useState(initialState || EditorState.createEmpty())
-  const currentStyle = editorState.getCurrentInlineStyle()
+  const [editorState, setEditorState] = useState(initialState)
   const currentSelection = editorState.getSelection()
-  const currentBlockType = editorState.getCurrentContent().getBlockForKey(currentSelection.getStartKey()).getType()
+  const currentContentState = editorState.getCurrentContent()
+  const currentStyle = editorState.getCurrentInlineStyle()
+  const currentBlockType = currentContentState.getBlockForKey(currentSelection.getStartKey()).getType()
+
+  useEffect(() => {
+    if (buttons) {
+      buttons.forEach((button) => {
+        button.onStateChange && button.onStateChange(editorState)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorState])
 
   const handleKeyCommand = (command: string, editorState: EditorState) => {
     const newEditorState = RichUtils.handleKeyCommand(editorState, command)
@@ -27,6 +57,7 @@ const Editor = ({onChange, rawInitialState, readonly}: EditorProps) => {
     return 'not-handled'
   }
 
+  // TODO: Refactor, this is ridiculous
   const handleBoldClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     handleOnChange(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
@@ -60,6 +91,13 @@ const Editor = ({onChange, rawInitialState, readonly}: EditorProps) => {
   const handleHeaderTwoClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     handleOnChange(RichUtils.toggleBlockType(editorState, 'header-two'))
+  }
+
+  const handleAdditionalButtonClick = (onMouseDown: (editorState: EditorState) => EditorState) => (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault()
+    handleOnChange(onMouseDown(editorState))
   }
 
   const handleOnChange = (newEditorState: EditorState) => {
@@ -96,10 +134,26 @@ const Editor = ({onChange, rawInitialState, readonly}: EditorProps) => {
             <Button icon="header-one" onMouseDown={handleHeaderOneClick} active={currentBlockType === 'header-one'} />
             <Button icon="header-two" onMouseDown={handleHeaderTwoClick} active={currentBlockType === 'header-two'} />
           </ButtonGroup>
+          {buttons && (
+            <>
+              <Divider />
+              <ButtonGroup minimal>
+                {buttons.map((button) => (
+                  <Button
+                    key={button.icon}
+                    icon={button.icon}
+                    text={button.text}
+                    onMouseDown={handleAdditionalButtonClick(button.onMouseDown)}
+                    disabled={button.disabled}
+                  />
+                ))}
+              </ButtonGroup>
+            </>
+          )}
         </div>
       )}
       <div
-        className={`textarea ${readonly ? `${Classes.CALLOUT} ${Classes.INTENT_PRIMARY} readonly` : ''}`}
+        className={`textarea ${readonly ? 'readonly' : ''} ${result ? 'done' : ''}`}
         onClick={() => editorRef.current?.focus()}
       >
         <DraftEditor

@@ -6,6 +6,7 @@ export enum ExerciseTypes {
   FreeText = 'FREE_TEXT',
   WordOrder = 'WORD_ORDER',
   Choice = 'CHOICE',
+  GapFill = 'GAP_FILL',
 }
 
 export interface CreatorSpecificExerciseComponentProps {
@@ -36,10 +37,17 @@ export type CreatorChoiceExerciseState = {
   correctAnswer: string
 } & CreatorExerciseStateCommon
 
+export type CreatorGapFillExerciseState = {
+  type: ExerciseTypes.GapFill
+  text: RawDraftContentState
+  answers: Record<string, string>
+} & CreatorExerciseStateCommon
+
 export type CreatorExerciseState =
   | CreatorFreeTextExerciseState
   | CreatorWordOrderExerciseState
   | CreatorChoiceExerciseState
+  | CreatorGapFillExerciseState
 
 interface CreatorExerciseDefinitionCommon {
   name: string
@@ -78,6 +86,10 @@ export type CreatorChoiceExerciseDefinition = {
   emptyState: CreatorChoiceExerciseState
 } & CreatorExerciseDefinitionCommon
 
+export type CreatorGapFillExerciseDefinition = {
+  emptyState: CreatorGapFillExerciseState
+} & CreatorExerciseDefinitionCommon
+
 export enum Collections {
   Tests = 'tests',
   Exercises = 'exercises',
@@ -113,7 +125,17 @@ export type TestChoiceExerciseState = {
   answer?: string
 } & TestExerciseStateCommon
 
-export type TestExerciseState = TestFreeTextExerciseState | TestWordOrderExerciseState | TestChoiceExerciseState
+export type TestGapFillExerciseState = {
+  type: ExerciseTypes.GapFill
+  assignment: RawDraftContentState
+  answer?: Record<string, string>
+} & TestExerciseStateCommon
+
+export type TestExerciseState =
+  | TestFreeTextExerciseState
+  | TestWordOrderExerciseState
+  | TestChoiceExerciseState
+  | TestGapFillExerciseState
 
 export interface TestSpecificExerciseComponentProps {
   index: number
@@ -132,6 +154,8 @@ export type TestFreeTextExerciseDefinition = TestExerciseDefinitionCommon
 export type TestWordOrderExerciseDefinition = TestExerciseDefinitionCommon
 
 export type TestChoiceExerciseDefinition = TestExerciseDefinitionCommon
+
+export type TestGapFillExerciseDefinition = TestExerciseDefinitionCommon
 
 type ResultExerciseStateCommon = {
   description: string
@@ -157,4 +181,15 @@ export type ResultChoiceExerciseState = {
   correctAnswer: string
 } & ResultExerciseStateCommon
 
-export type ResultExerciseState = ResultFreeTextExerciseState | ResultWordOrderExerciseState | ResultChoiceExerciseState
+export type ResultGapFillExerciseState = {
+  type: ExerciseTypes.GapFill
+  assignment: RawDraftContentState
+  answer?: Record<string, string>
+  correctAnswer: Record<string, string>
+} & ResultExerciseStateCommon
+
+export type ResultExerciseState =
+  | ResultFreeTextExerciseState
+  | ResultWordOrderExerciseState
+  | ResultChoiceExerciseState
+  | ResultGapFillExerciseState

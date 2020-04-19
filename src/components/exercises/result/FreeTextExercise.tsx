@@ -8,7 +8,7 @@ const FreeTextExercise = ({answer}: ResultFreeTextExerciseState) => {
   return (
     <>
       <Label>Answer:</Label>
-      <Editor readonly rawInitialState={answer} />
+      <Editor readonly result rawInitialState={answer} />
     </>
   )
 }

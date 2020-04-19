@@ -7,12 +7,15 @@ import {
   TestFreeTextExerciseDefinition,
   TestWordOrderExerciseDefinition,
   TestChoiceExerciseDefinition,
+  TestGapFillExerciseDefinition,
 } from '../types'
+import GapFillExercise from '../components/exercises/test/GapFillExercise'
 
 type Exercises = {
   [ExerciseTypes.FreeText]: TestFreeTextExerciseDefinition
   [ExerciseTypes.WordOrder]: TestWordOrderExerciseDefinition
   [ExerciseTypes.Choice]: TestChoiceExerciseDefinition
+  [ExerciseTypes.GapFill]: TestGapFillExerciseDefinition
 }
 
 export const testExerciseTypes: Exercises = {
@@ -24,5 +27,8 @@ export const testExerciseTypes: Exercises = {
   },
   [ExerciseTypes.Choice]: {
     component: ChoiceExercise,
+  },
+  [ExerciseTypes.GapFill]: {
+    component: GapFillExercise,
   },
 }
