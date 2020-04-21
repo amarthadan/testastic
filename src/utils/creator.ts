@@ -30,7 +30,6 @@ export const creatorExerciseTypes: Exercises = {
     component: null,
     emptyState: {
       type: ExerciseTypes.FreeText,
-      description: '',
     },
     // assignment: empty,
     // answer: empty,
@@ -40,7 +39,6 @@ export const creatorExerciseTypes: Exercises = {
     component: WordOrderExercise,
     emptyState: {
       type: ExerciseTypes.WordOrder,
-      description: '',
       sentence: '',
     },
     // assignment: (exercise) => shuffle(exercise.sentence.split(' ')),
@@ -51,7 +49,6 @@ export const creatorExerciseTypes: Exercises = {
     component: ChoiceExercise,
     emptyState: {
       type: ExerciseTypes.Choice,
-      description: '',
       question: '',
       answers: [''],
       correctAnswer: '',
@@ -62,7 +59,6 @@ export const creatorExerciseTypes: Exercises = {
     component: GapFillExercise,
     emptyState: {
       type: ExerciseTypes.GapFill,
-      description: '',
       text: convertToRaw(EditorState.createEmpty().getCurrentContent()),
       answers: {},
     },

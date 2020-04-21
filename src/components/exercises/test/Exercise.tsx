@@ -1,6 +1,8 @@
 import React from 'react'
 import {Card} from '@blueprintjs/core'
+import {RawDraftContentState} from 'draft-js'
 
+import Editor from '../../common/Editor'
 import {testExerciseTypes} from '../../../utils/test'
 import {ExerciseTypes} from '../../../types'
 
@@ -9,7 +11,7 @@ import './Exercise.scss'
 interface ExerciseProps {
   index: number
   type: ExerciseTypes
-  description: string
+  description: RawDraftContentState
 }
 
 const Exercise = ({index, type, description}: ExerciseProps) => {
@@ -17,7 +19,7 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
 
   return (
     <Card className="test-exercise">
-      <p>{description}</p>
+      {description && <Editor readonly description rawInitialState={description} />}
       <div className="specific">{SpecificExercise && <SpecificExercise index={index} />}</div>
     </Card>
   )

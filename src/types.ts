@@ -18,7 +18,7 @@ interface CreatorSpecificExerciseComponent {
 }
 
 interface CreatorExerciseStateCommon {
-  description: string
+  description?: RawDraftContentState
 }
 
 type CreatorFreeTextExerciseState = {
@@ -99,7 +99,7 @@ export enum Collections {
 
 interface TestExerciseStateCommon {
   id: string
-  description: string
+  description: RawDraftContentState
 }
 
 export type TestFreeTextExerciseState = {
@@ -158,7 +158,7 @@ export type TestChoiceExerciseDefinition = TestExerciseDefinitionCommon
 export type TestGapFillExerciseDefinition = TestExerciseDefinitionCommon
 
 type ResultExerciseStateCommon = {
-  description: string
+  description: RawDraftContentState
 }
 
 export type ResultFreeTextExerciseState = {

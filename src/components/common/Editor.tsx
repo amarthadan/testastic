@@ -24,11 +24,12 @@ type EditorProps = {
   rawInitialState?: RawDraftContentState
   readonly?: boolean
   result?: boolean
+  description?: boolean
   decorator?: CompositeDecorator
   buttons?: Array<EditorButton>
 }
 
-const Editor = ({onChange, rawInitialState, readonly, result, decorator, buttons}: EditorProps) => {
+const Editor = ({onChange, rawInitialState, readonly, result, description, decorator, buttons}: EditorProps) => {
   const initialState = rawInitialState
     ? EditorState.createWithContent(convertFromRaw(rawInitialState), decorator)
     : EditorState.createEmpty(decorator)
@@ -153,7 +154,7 @@ const Editor = ({onChange, rawInitialState, readonly, result, decorator, buttons
         </div>
       )}
       <div
-        className={`textarea ${readonly ? 'readonly' : ''} ${result ? 'done' : ''}`}
+        className={`textarea ${readonly ? 'readonly' : ''} ${result ? 'done' : ''} ${description ? 'description' : ''}`}
         onClick={() => editorRef.current?.focus()}
       >
         <DraftEditor

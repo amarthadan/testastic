@@ -66,8 +66,8 @@ const NewTestScreen = () => {
 
     const exerciseDocuments = exercises.map((exercise) => ({
       type: exercise.type,
-      description: exercise.description,
       assignment: buildAssignment(exercise),
+      ...(exercise.description && {description: exercise.description}),
     }))
 
     const answers = exercises.map((exercise) => buildAnswer(exercise))
@@ -160,7 +160,7 @@ const NewTestScreen = () => {
             </div>
             <div className="exercises">
               {exercises.map((exercise, index) => (
-                <Exercise key={index} index={index} type={exercise.type} description={exercise.description} />
+                <Exercise key={index} index={index} type={exercise.type} />
               ))}
               <ButtonGroup className="add-exercise" onClick={add}>
                 <Button large intent="primary" icon="add" text="Add exercise" />

@@ -1,8 +1,10 @@
 import React from 'react'
 import {useDispatch} from 'react-redux'
-import {Button, MenuItem, FormGroup, Card, TextArea} from '@blueprintjs/core'
+import {Button, MenuItem, FormGroup, Card} from '@blueprintjs/core'
 import {ItemRenderer, Select} from '@blueprintjs/select'
+import {EditorState, convertToRaw} from 'draft-js'
 
+import Editor from '../../common/Editor'
 import {creatorExerciseTypes} from '../../../utils/creator'
 import {removeExercise, updateExerciseType, updateExerciseDescription} from '../../../redux/reducers/creator'
 import {ExerciseTypes} from '../../../types'
@@ -28,10 +30,9 @@ const renderType: ItemRenderer<ExerciseTypes> = (exerciseType, {handleClick, mod
 interface ExerciseProps {
   index: number
   type: ExerciseTypes
-  description: string
 }
 
-const Exercise = ({index, type, description}: ExerciseProps) => {
+const Exercise = ({index, type}: ExerciseProps) => {
   const dispatch = useDispatch()
 
   const SpecificExercise = creatorExerciseTypes[type].component
@@ -40,8 +41,8 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
     dispatch(removeExercise(index))
   }
 
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(updateExerciseDescription({index, description: event.target.value}))
+  const handleDescriptionChange = (editorState: EditorState) => {
+    dispatch(updateExerciseDescription({index, description: convertToRaw(editorState.getCurrentContent())}))
   }
 
   return (
@@ -63,7 +64,7 @@ const Exercise = ({index, type, description}: ExerciseProps) => {
         </CreatorExerciseTypeSelect>
       </FormGroup>
       <FormGroup label="Description:">
-        <TextArea growVertically={true} fill value={description} onChange={handleDescriptionChange} />
+        <Editor onChange={handleDescriptionChange} />
       </FormGroup>
       <div className="specific">{SpecificExercise && <SpecificExercise index={index} />}</div>
     </Card>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card} from '@blueprintjs/core'
 
+import Editor from '../../common/Editor'
 import {specificExercise} from '../../../utils/result'
 import {ResultExerciseState} from '../../../types'
 
@@ -14,7 +15,7 @@ const Exercise = ({exercise}: ExerciseProps) => {
   const SpecificExercise = specificExercise(exercise)
   return (
     <Card className="result-exercise">
-      <p>{exercise.description}</p>
+      {exercise.description && <Editor readonly description rawInitialState={exercise.description} />}
       <div className="specific">
         <SpecificExercise />
       </div>

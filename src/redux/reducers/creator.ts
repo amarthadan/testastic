@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {RawDraftContentState} from 'draft-js'
 
 import {defaultExerciseType, creatorExerciseTypes} from '../../utils/creator'
 import {CreatorExerciseState, ExerciseTypes} from '../../types'
@@ -16,7 +17,7 @@ type CreatorExerciseUpdateTypePayload = {
 } & CreatorExerciseUpdatePayloadCommon
 
 type CreatorExerciseUpdateDescriptionPayload = {
-  description: string
+  description: RawDraftContentState
 } & CreatorExerciseUpdatePayloadCommon
 
 type CreatorExerciseUpdatePayload = {
