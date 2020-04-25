@@ -1,15 +1,15 @@
 import React, {useState} from 'react'
 import {H1, FormGroup, InputGroup, Button, ButtonGroup, Intent, H2} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import {useHistory, Link} from 'react-router-dom'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
+import {firestore} from '../../database'
 import {exercisesSelector} from '../../redux/selectors/creator'
 import {addExercise} from '../../redux/reducers/creator'
 import {generateIdentifier} from '../../utils/common'
 import {buildAnswer, buildAssignment} from '../../utils/creator'
-import {useCollection} from '../../hooks/database'
 import {Collections} from '../../types'
 
 import Exercise from '../exercises/creator/Exercise'
@@ -17,7 +17,6 @@ import Toaster from '../common/Toaster'
 import Working from '../common/Working'
 
 import './NewTestScreen.scss'
-import {Link} from 'react-router-dom'
 
 const schema = yup.object().shape({
   title: yup.string().required(),
@@ -39,8 +38,6 @@ const NewTestScreen = () => {
   const [created, setCreated] = useState(false)
   const [resultsId, setResultsId] = useState<string>()
   const [testId, setTestId] = useState<string>()
-  const testsCollection = useCollection(Collections.Tests)
-  const correctAnswersCollection = useCollection(Collections.CorrectAnswers)
   const {handleSubmit, control, errors, formState} = useForm<FormData>({
     validationSchema: schema,
     mode: 'onChange',
@@ -56,6 +53,8 @@ const NewTestScreen = () => {
 
   const build = async (title: string, name: string, email: string) => {
     setWorking(true)
+    const testsCollection = firestore.collection(Collections.Tests)
+    const correctAnswersCollection = firestore.collection(Collections.CorrectAnswers)
 
     const testDocument = {
       title,

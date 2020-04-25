@@ -9,13 +9,12 @@ import TestScreen from './components/screens/TestScreen'
 import ResultScreen from './components/screens/ResultScreen'
 import ResultsScreen from './components/screens/ResultsScreen'
 
-import {useInitDB} from './hooks/database'
+import './database'
 import store from './redux/store'
 
 import './App.scss'
 
 function App() {
-  useInitDB()
   FocusStyleManager.onlyShowFocusOnTabs()
 
   return (

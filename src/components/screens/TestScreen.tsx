@@ -7,13 +7,13 @@ import * as yup from 'yup'
 
 import Working from '../common/Working'
 import Exercise from '../exercises/test/Exercise'
+import Toaster from '../common/Toaster'
+import {firestore} from '../../database'
 import {exercisesSelector} from '../../redux/selectors/test'
-import {useCollection} from '../../hooks/database'
 import {setExercises} from '../../redux/reducers/test'
 import {Collections, TestExerciseState} from '../../types'
 
 import './TestScreen.scss'
-import Toaster from '../common/Toaster'
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -33,8 +33,6 @@ const TestScreen = () => {
   const [title, setTitle] = useState('')
   const [creator, setCreator] = useState('')
   const [notFound, setNotFound] = useState(false)
-  const testsCollection = useCollection(Collections.Tests)
-  const answersCollection = useCollection(Collections.Answers)
   const {id} = useParams()
   const {handleSubmit, control, errors, formState} = useForm<FormData>({
     validationSchema: schema,
@@ -44,6 +42,8 @@ const TestScreen = () => {
   useEffect(() => {
     setWorking(true)
     const fetchTest = async () => {
+      const testsCollection = firestore.collection(Collections.Tests)
+
       const testDocumentRef = testsCollection.doc(id)
       const testDocument = await testDocumentRef.get()
       if (testDocument.exists) {
@@ -85,8 +85,7 @@ const TestScreen = () => {
       })
       setWorking(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  }, [dispatch, id])
 
   const onSubmit = handleSubmit(({name, email}) => {
     submit(name, email)
@@ -94,6 +93,7 @@ const TestScreen = () => {
 
   const submit = async (name: string, email: string) => {
     setWorking(true)
+    const answersCollection = firestore.collection(Collections.Answers)
 
     const answerDocument = {
       name,

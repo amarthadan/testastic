@@ -3,12 +3,12 @@ import {useParams} from 'react-router-dom'
 import {H1, Intent} from '@blueprintjs/core'
 
 import Working from '../common/Working'
+import Toaster from '../common/Toaster'
 import Exercise from '../exercises/result/Exercise'
-import {useCollection} from '../../hooks/database'
+import {firestore} from '../../database'
 import {Collections, ResultExerciseState} from '../../types'
 
 import './ResultScreen.scss'
-import Toaster from '../common/Toaster'
 
 const ResultScreen = () => {
   const [working, setWorking] = useState(true)
@@ -18,14 +18,15 @@ const ResultScreen = () => {
   const [date, setDate] = useState(0)
   const [exercises, setExercises] = useState<Array<ResultExerciseState>>([])
   const [notFound, setNotFound] = useState(false)
-  const testsCollection = useCollection(Collections.Tests)
-  const answersCollection = useCollection(Collections.Answers)
-  const correctAnswersCollection = useCollection(Collections.CorrectAnswers)
   const {id} = useParams()
 
   useEffect(() => {
     setWorking(true)
     const fetchResults = async () => {
+      const testsCollection = firestore.collection(Collections.Tests)
+      const answersCollection = firestore.collection(Collections.Answers)
+      const correctAnswersCollection = firestore.collection(Collections.CorrectAnswers)
+
       const answerDocumentRef = answersCollection.doc(id)
       const answerDocument = await answerDocumentRef.get()
       if (answerDocument.exists) {
@@ -108,7 +109,6 @@ const ResultScreen = () => {
       })
       setWorking(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   return (

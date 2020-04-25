@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-
-import {useCollection} from '../../hooks/database'
-import {Collections} from '../../types'
-import Working from '../common/Working'
 import {H1, HTMLTable, Intent} from '@blueprintjs/core'
 
-import './ResultsScreen.scss'
+import Working from '../common/Working'
 import Toaster from '../common/Toaster'
+import {firestore} from '../../database'
+import {Collections} from '../../types'
+
+import './ResultsScreen.scss'
 
 type Result = {
   id: string
@@ -22,13 +22,14 @@ const ResultsScreen = () => {
   const [working, setWorking] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const {push} = useHistory()
-  const testsCollection = useCollection(Collections.Tests)
-  const answersCollection = useCollection(Collections.Answers)
   const {id} = useParams()
 
   useEffect(() => {
     setWorking(true)
     const fetchResults = async () => {
+      const testsCollection = firestore.collection(Collections.Tests)
+      const answersCollection = firestore.collection(Collections.Answers)
+
       let testId
       let querySnapshot = await testsCollection.where('resultsId', '==', id).get()
       querySnapshot.forEach((testDocument) => {
@@ -70,7 +71,6 @@ const ResultsScreen = () => {
       })
       setWorking(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   const handleRowClick = (answerId: string) => {
