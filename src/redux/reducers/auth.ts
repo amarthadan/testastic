@@ -3,16 +3,17 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 type AuthState = {
   initialized: boolean
   loggedIn: boolean
-  redirectAfterLogin: string
+  verified: boolean
 }
 
 type UpdateLoggedInPayload = boolean
 type UpdateInitializedPayload = boolean
+type UpdateVerifiedPayload = boolean
 
 const initialState: AuthState = {
   initialized: false,
   loggedIn: false,
-  redirectAfterLogin: '/',
+  verified: false,
 }
 
 const auth = createSlice({
@@ -25,9 +26,12 @@ const auth = createSlice({
     setInitialized(state, action: PayloadAction<UpdateInitializedPayload>) {
       state.initialized = action.payload
     },
+    setVerified(state, action: PayloadAction<UpdateInitializedPayload>) {
+      state.verified = action.payload
+    },
   },
 })
 
-export const {setLoggedIn, setInitialized} = auth.actions
+export const {setLoggedIn, setInitialized, setVerified} = auth.actions
 
 export default auth.reducer

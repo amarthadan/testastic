@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react'
 import {RouteProps, Route, Redirect, useLocation} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
-import {Navbar, NavbarGroup, Button, Alignment, FormGroup} from '@blueprintjs/core'
 
-import {loggedInSelector, initializedSelector} from '../../redux/selectors/auth'
-import {auth} from '../../database'
+import {loggedInSelector, initializedSelector, verifiedSelector} from '../../redux/selectors/auth'
 
 import './PrivateRoute.scss'
 
@@ -15,11 +13,7 @@ const PrivateRoute = ({children, ...rest}: PrivateRouteProps) => {
   const dispatch = useDispatch()
   const initialized = useSelector(initializedSelector)
   const loggedIn = useSelector(loggedInSelector)
-
-  const user = auth.currentUser
-  const signOut = () => {
-    auth.signOut()
-  }
+  const verified = useSelector(verifiedSelector)
 
   useEffect(() => {
     if (initialized && !loggedIn) {
@@ -32,17 +26,8 @@ const PrivateRoute = ({children, ...rest}: PrivateRouteProps) => {
       {...rest}
       render={() =>
         initialized &&
-        (loggedIn ? (
-          <>
-            <Navbar id="navbar">
-              <NavbarGroup align={Alignment.RIGHT}>
-                <FormGroup inline label={user?.displayName}>
-                  <Button minimal icon="log-out" text="Logout" onClick={signOut} />
-                </FormGroup>
-              </NavbarGroup>
-            </Navbar>
-            {children}
-          </>
+        (loggedIn && verified ? (
+          <>{children}</>
         ) : (
           <Redirect
             to={{
