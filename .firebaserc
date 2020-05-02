@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "testastic-9508b"
+    "default": "testastic-9508b",
+    "development": "testastic-staging"
   }
 }
