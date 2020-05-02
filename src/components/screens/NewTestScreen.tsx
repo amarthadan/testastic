@@ -5,7 +5,7 @@ import {useHistory, Link} from 'react-router-dom'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {firestore} from '../../database'
+import {firestore, auth} from '../../database'
 import {exercisesSelector} from '../../redux/selectors/creator'
 import {addExercise} from '../../redux/reducers/creator'
 import {generateIdentifier} from '../../utils/common'
@@ -20,14 +20,10 @@ import './NewTestScreen.scss'
 
 const schema = yup.object().shape({
   title: yup.string().required(),
-  name: yup.string().required(),
-  email: yup.string().required().email(),
 })
 
 type FormData = {
   title: string
-  name: string
-  email: string
 }
 
 const NewTestScreen = () => {
@@ -38,6 +34,7 @@ const NewTestScreen = () => {
   const [created, setCreated] = useState(false)
   const [resultsId, setResultsId] = useState<string>()
   const [testId, setTestId] = useState<string>()
+  const currentUser = auth.currentUser
   const {handleSubmit, control, errors, formState} = useForm<FormData>({
     validationSchema: schema,
     mode: 'onChange',
@@ -47,19 +44,23 @@ const NewTestScreen = () => {
     dispatch(addExercise())
   }
 
-  const onSubmit = handleSubmit(({title, name, email}) => {
-    build(title, name, email)
+  const onSubmit = handleSubmit(({title}) => {
+    build(title)
   })
 
-  const build = async (title: string, name: string, email: string) => {
+  const build = async (title: string) => {
+    if (!currentUser) {
+      throw new Error('No user signed in! Should not happen!')
+    }
+
     setWorking(true)
     const testsCollection = firestore.collection(Collections.Tests)
     const correctAnswersCollection = firestore.collection(Collections.CorrectAnswers)
 
     const testDocument = {
       title,
-      name,
-      email,
+      name: currentUser.displayName,
+      email: currentUser.email,
       resultsId: generateIdentifier(),
     }
 
@@ -136,24 +137,6 @@ const NewTestScreen = () => {
                   control={control}
                   id="title"
                   intent={errors.title && Intent.DANGER}
-                />
-              </FormGroup>
-              <FormGroup label="Name:" labelFor="name" inline>
-                <Controller
-                  as={InputGroup}
-                  name="name"
-                  control={control}
-                  id="name"
-                  intent={errors.name && Intent.DANGER}
-                />
-              </FormGroup>
-              <FormGroup label="Email:" labelFor="email" inline>
-                <Controller
-                  as={InputGroup}
-                  name="email"
-                  control={control}
-                  id="email"
-                  intent={errors.email && Intent.DANGER}
                 />
               </FormGroup>
             </div>

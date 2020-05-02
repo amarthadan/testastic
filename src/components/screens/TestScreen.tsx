@@ -1,29 +1,17 @@
 import React, {useState, useEffect} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import {H1, ButtonGroup, Button, FormGroup, InputGroup, Intent} from '@blueprintjs/core'
+import {H1, ButtonGroup, Button, Intent} from '@blueprintjs/core'
 import {useSelector, useDispatch} from 'react-redux'
-import {useForm, Controller} from 'react-hook-form'
-import * as yup from 'yup'
 
 import Working from '../common/Working'
 import Exercise from '../exercises/test/Exercise'
 import Toaster from '../common/Toaster'
-import {firestore} from '../../database'
+import {firestore, auth} from '../../database'
 import {exercisesSelector} from '../../redux/selectors/test'
 import {setExercises} from '../../redux/reducers/test'
 import {Collections, TestExerciseState} from '../../types'
 
 import './TestScreen.scss'
-
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().required().email(),
-})
-
-type FormData = {
-  name: string
-  email: string
-}
 
 const TestScreen = () => {
   const dispatch = useDispatch()
@@ -34,10 +22,7 @@ const TestScreen = () => {
   const [creator, setCreator] = useState('')
   const [notFound, setNotFound] = useState(false)
   const {id} = useParams()
-  const {handleSubmit, control, errors, formState} = useForm<FormData>({
-    validationSchema: schema,
-    mode: 'onChange',
-  })
+  const currentUser = auth.currentUser
 
   useEffect(() => {
     setWorking(true)
@@ -87,17 +72,17 @@ const TestScreen = () => {
     }
   }, [dispatch, id])
 
-  const onSubmit = handleSubmit(({name, email}) => {
-    submit(name, email)
-  })
+  const submit = async () => {
+    if (!currentUser) {
+      throw new Error('No user signed in! Should not happen!')
+    }
 
-  const submit = async (name: string, email: string) => {
     setWorking(true)
     const answersCollection = firestore.collection(Collections.Answers)
 
     const answerDocument = {
-      name,
-      email,
+      name: currentUser.displayName,
+      email: currentUser.email,
       testId: id,
       timestamp: Date.now(),
     }
@@ -137,41 +122,14 @@ const TestScreen = () => {
         <>
           <H1>{title}</H1>
           <p>Creator: {creator}</p>
-          <form onSubmit={onSubmit}>
-            <div className="form-area">
-              <FormGroup label="Name:" labelFor="name" inline>
-                <Controller
-                  as={InputGroup}
-                  name="name"
-                  control={control}
-                  id="name"
-                  intent={errors.name && Intent.DANGER}
-                />
-              </FormGroup>
-              <FormGroup label="Email:" labelFor="email" inline>
-                <Controller
-                  as={InputGroup}
-                  name="email"
-                  control={control}
-                  id="email"
-                  intent={errors.email && Intent.DANGER}
-                />
-              </FormGroup>
-            </div>
+          <form onSubmit={submit}>
             <div className="exercises">
               {exercises.map((exercise, index) => (
                 <Exercise key={index} type={exercise.type} description={exercise.description} index={index} />
               ))}
             </div>
             <ButtonGroup className="submit-test">
-              <Button
-                large
-                intent="success"
-                icon="tick"
-                text="Submit test"
-                type="submit"
-                disabled={!formState.isValid}
-              />
+              <Button large intent="success" icon="tick" text="Submit test" type="submit" />
             </ButtonGroup>
           </form>
         </>
