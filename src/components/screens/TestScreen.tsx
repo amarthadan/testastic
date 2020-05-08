@@ -19,7 +19,8 @@ const TestScreen = () => {
   const exercises = useSelector(exercisesSelector)
   const [working, setWorking] = useState(true)
   const [title, setTitle] = useState('')
-  const [creator, setCreator] = useState('')
+  const [creatorName, setCreatorName] = useState('')
+  const [creatorEmail, setCreatorEmail] = useState('')
   const [notFound, setNotFound] = useState(false)
   const {id} = useParams()
   const currentUser = auth.currentUser
@@ -35,7 +36,8 @@ const TestScreen = () => {
         const data = testDocument.data()
         if (data) {
           setTitle(data.title)
-          setCreator(data.name)
+          setCreatorName(data.name)
+          setCreatorEmail(data.email)
         }
 
         const exerciseDocuments: Array<TestExerciseState> = []
@@ -79,6 +81,7 @@ const TestScreen = () => {
 
     setWorking(true)
     const answersCollection = firestore.collection(Collections.Answers)
+    const emailsCollection = firestore.collection(Collections.Emails)
 
     const answerDocument = {
       name: currentUser.displayName,
@@ -98,6 +101,17 @@ const TestScreen = () => {
 
         await answerDocumentRef.collection(Collections.Exercises).doc(exercise.id).set(exerciseDocument)
       }
+
+      const emailDocument = {
+        to: creatorEmail,
+        subject: 'Testastic - New answer submitted',
+        text: `
+        New answer was submited for test "${title}"
+        Follow the link to see the results: ${window.location.origin}/answers/${answerDocumentRef.id}
+        `,
+      }
+
+      await emailsCollection.add(emailDocument)
 
       push(`/answers/${answerDocumentRef.id}`)
     } catch (error) {
@@ -121,7 +135,7 @@ const TestScreen = () => {
       ) : (
         <>
           <H1>{title}</H1>
-          <p>Creator: {creator}</p>
+          <p>Creator: {creatorName}</p>
           <form onSubmit={submit}>
             <div className="exercises">
               {exercises.map((exercise, index) => (

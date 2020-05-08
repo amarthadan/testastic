@@ -95,6 +95,7 @@ export enum Collections {
   Exercises = 'exercises',
   CorrectAnswers = 'correctAnswers',
   Answers = 'answers',
+  Emails = 'emails',
 }
 
 interface TestExerciseStateCommon {
