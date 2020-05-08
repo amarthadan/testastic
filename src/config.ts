@@ -2,7 +2,7 @@ import firebaseDB from './database'
 import * as firebaseui from 'firebaseui'
 
 export const firebase =
-  process.env.FIREBASE_ENV === 'production'
+  process.env.REACT_APP_FIREBASE_ENV === 'production'
     ? {
         apiKey: 'AIzaSyB9FOgmnux53_L5NLARM03Dl2Cn_j7VYAk',
         authDomain: 'testastic-9508b.firebaseapp.com',
